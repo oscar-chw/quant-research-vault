@@ -1,0 +1,56 @@
+{
+  "source_revision": "8bfa47ee9ecf17c7a5c13514f5f8ccd9b21dfda4",
+  "source_sha256": "ac275d2f7332d8b87e455f44171e033b466a983b45d68ded8adbaf13c371b9f3",
+  "control": "Fixed valid reports and single-field broken copies in the same run; direct raw source hashing and excerpt/reference reconstruction independent of producer/verifier.",
+  "cases": [
+    {
+      "case": "valid",
+      "status": "verified",
+      "code": null,
+      "independent_source_match": true
+    },
+    {
+      "case": "quote",
+      "status": "error",
+      "code": "REPORT_MISMATCH",
+      "independent_source_match": false
+    },
+    {
+      "case": "citation",
+      "status": "error",
+      "code": "REPORT_MISMATCH",
+      "independent_source_match": false
+    },
+    {
+      "case": "coverage",
+      "status": "error",
+      "code": "REPORT_MISMATCH",
+      "independent_source_match": true
+    },
+    {
+      "case": "status",
+      "status": "error",
+      "code": "REPORT_MISMATCH",
+      "independent_source_match": true
+    },
+    {
+      "case": "json_type",
+      "status": "error",
+      "code": "REPORT_MISMATCH",
+      "independent_source_match": true
+    },
+    {
+      "case": "no-match",
+      "status": "verified",
+      "code": null,
+      "independent_source_match": true
+    },
+    {
+      "case": "limited",
+      "status": "verified",
+      "code": null,
+      "independent_source_match": true
+    }
+  ],
+  "scope": "Functional consistency only; no relevance, authenticity or performance evaluation."
+}

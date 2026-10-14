@@ -1,0 +1,25 @@
+1 file reformatted
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_malformed_manifest_is_refused_by_report_cli_and_note_loader[duplicate_rights] _
+test_manifest_boundary.py:52: in test_malformed_manifest_is_refused_by_report_cli_and_note_loader
+    with pytest.raises(shared_notes.SharedNotesError) as error:
+E   Failed: DID NOT RAISE SharedNotesError
+_ test_malformed_manifest_is_refused_by_report_cli_and_note_loader[nonfinite_value] _
+test_manifest_boundary.py:52: in test_malformed_manifest_is_refused_by_report_cli_and_note_loader
+    with pytest.raises(shared_notes.SharedNotesError) as error:
+E   Failed: DID NOT RAISE SharedNotesError
+_ test_malformed_manifest_is_refused_by_report_cli_and_note_loader[surrogate_title] _
+test_manifest_boundary.py:52: in test_malformed_manifest_is_refused_by_report_cli_and_note_loader
+    with pytest.raises(shared_notes.SharedNotesError) as error:
+E   Failed: DID NOT RAISE SharedNotesError
+_ test_malformed_manifest_is_refused_by_report_cli_and_note_loader[overflow_value] _
+test_manifest_boundary.py:52: in test_malformed_manifest_is_refused_by_report_cli_and_note_loader
+    with pytest.raises(shared_notes.SharedNotesError) as error:
+E   Failed: DID NOT RAISE SharedNotesError
+=========================== short test summary info ============================
+FAILED test_manifest_boundary.py::test_malformed_manifest_is_refused_by_report_cli_and_note_loader[duplicate_rights]
+FAILED test_manifest_boundary.py::test_malformed_manifest_is_refused_by_report_cli_and_note_loader[nonfinite_value]
+FAILED test_manifest_boundary.py::test_malformed_manifest_is_refused_by_report_cli_and_note_loader[surrogate_title]
+FAILED test_manifest_boundary.py::test_malformed_manifest_is_refused_by_report_cli_and_note_loader[overflow_value]
+4 failed in 0.86s

@@ -1,0 +1,44 @@
+{
+  "source_sha256": {
+    "shared_notes.py": "b50508d094c988134a030bd1544420f32a257e07d20f1f13eb8025b5a3393d40",
+    "search_mcp.py": "83af113ff86041d3fa2e54510d9db0c5f62333bf381fa7d7381264e171f6b7ca"
+  },
+  "same_run": [
+    {
+      "case": "control",
+      "target": "test_hosted_contract_edges.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "contract-control.log"
+    },
+    {
+      "case": "omit_mixed_title",
+      "target": "test_hosted_contract_edges.py::test_title_terms_are_cited_even_with_document_windows[point bounded]",
+      "exit_code": 1,
+      "result": "KILLED by named behavior assertion",
+      "log": "contract-omit_mixed_title.log"
+    },
+    {
+      "case": "loose_query_budget",
+      "target": "test_hosted_contract_edges.py::test_large_or_unencodable_query_is_a_small_safe_error[multibyte-over-budget]",
+      "exit_code": 1,
+      "result": "KILLED by named behavior assertion",
+      "log": "contract-loose_query_budget.log"
+    },
+    {
+      "case": "loose_output_budget",
+      "target": "test_hosted_contract_edges.py::test_report_budget_includes_metadata_and_result_copies",
+      "exit_code": 1,
+      "result": "KILLED by named behavior assertion",
+      "log": "contract-loose_output_budget.log"
+    },
+    {
+      "case": "empty_arg_server_mode",
+      "target": "test_hosted_contract_edges.py::test_empty_shared_cli_value_never_starts_server",
+      "exit_code": 1,
+      "result": "KILLED by named behavior assertion",
+      "log": "contract-empty_arg_server_mode.log"
+    }
+  ],
+  "scope": "Only mixed evidence/query and output budgets/empty-CLI routing; original assertions unchanged; no server started"
+}

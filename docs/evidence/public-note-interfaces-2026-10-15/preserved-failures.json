@@ -1,0 +1,40 @@
+{
+  "schema": "vault-prior-failures/v1",
+  "failures": [
+    {
+      "case": "common-mode-source-red",
+      "reported_result": "1 failed in 0.79s",
+      "exit_code": 1,
+      "raw_receipt_sha256": "d574f2d91c3128e1d61182240109f2cebf44d8f3adf78d9daf6e832aae9f865d",
+      "raw_retained_on_local_branch": "codex/vault-report-verification-20261014"
+    },
+    {
+      "case": "source-metadata-red",
+      "reported_result": "2 failed in 0.88s",
+      "exit_code": 1,
+      "raw_receipt_sha256": "174c32d429594847fbd33de50e402eec94aa0a503e82a0635f1762a2aa138032",
+      "raw_retained_on_local_branch": "codex/vault-report-verification-20261014"
+    },
+    {
+      "case": "root-manifest-parser-red",
+      "reported_result": "2 failed in 0.86s",
+      "exit_code": 1,
+      "raw_receipt_sha256": "21ea8431093624becc91b27ccfe0f1ee52d79df3286499e13014ce206fc0ad9b",
+      "raw_retained_on_local_branch": "codex/vault-report-verification-20261014"
+    },
+    {
+      "case": "malformed-status-red",
+      "reported_result": "2 failed, 1 passed in 0.82s",
+      "exit_code": 1,
+      "raw_receipt_sha256": "0cc5f8f1ffa9cecdcbea314534db11127d2a5986da93a3ea64771208f648ddb1",
+      "raw_retained_on_local_branch": "codex/vault-report-verification-20261014"
+    },
+    {
+      "case": "accepted-history-publication-preflight",
+      "exit_code": 1,
+      "result": "9 home-path findings from scan_history.py --since origin/main .",
+      "response": "Accepted history preserved unchanged; public candidate starts from existing public main and includes no machine-specific history."
+    }
+  ],
+  "policy": "No original checks, runtime limits, assertions or failed receipts changed."
+}

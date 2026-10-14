@@ -1,0 +1,120 @@
+FFFF......                                                               [100%]
+=================================== FAILURES ===================================
+___ test_every_claimed_term_has_complete_visible_evidence[distant-one-line] ____
+
+tmp_path = PosixPath('/private/var/folders/3z/qg67zkkn0m5325qx65hvgh580000gn/T/pytest-of-oscarmoon/pytest-13005/test_every_claimed_term_has_co0')
+text = 'alpha                                                                                                                ...                                                                                                                  beta'
+query = 'alpha beta', status = 'matched'
+
+    @pytest.mark.parametrize(
+        "text,query,status",
+        [
+            ("alpha " + " " * 600 + " beta", "alpha beta", "matched"),
+            ("alpha\n" * 4 + "beta", "alpha beta", "matched"),
+            ("alpha " + " " * 600 + " beta", "point alpha beta", "matched"),
+            ("alpha " + " " * 600 + " beta", "alpha beta banana", "partial"),
+        ],
+        ids=["distant-one-line", "repeated-prefix", "title-and-distant", "partial"],
+    )
+    def test_every_claimed_term_has_complete_visible_evidence(
+        tmp_path, text, query, status
+    ):
+        root, _, _ = _shared_note_fixture(tmp_path, text=text)
+        report = shared_notes.search_shared_notes_report(query, root=root)
+>       assert report["status"] == status
+E       AssertionError: assert 'error' == 'matched'
+E
+E         - matched
+E         + error
+
+test_evidence_coverage.py:28: AssertionError
+____ test_every_claimed_term_has_complete_visible_evidence[repeated-prefix] ____
+
+tmp_path = PosixPath('/private/var/folders/3z/qg67zkkn0m5325qx65hvgh580000gn/T/pytest-of-oscarmoon/pytest-13005/test_every_claimed_term_has_co1')
+text = 'alpha\nalpha\nalpha\nalpha\nbeta', query = 'alpha beta'
+status = 'matched'
+
+    @pytest.mark.parametrize(
+        "text,query,status",
+        [
+            ("alpha " + " " * 600 + " beta", "alpha beta", "matched"),
+            ("alpha\n" * 4 + "beta", "alpha beta", "matched"),
+            ("alpha " + " " * 600 + " beta", "point alpha beta", "matched"),
+            ("alpha " + " " * 600 + " beta", "alpha beta banana", "partial"),
+        ],
+        ids=["distant-one-line", "repeated-prefix", "title-and-distant", "partial"],
+    )
+    def test_every_claimed_term_has_complete_visible_evidence(
+        tmp_path, text, query, status
+    ):
+        root, _, _ = _shared_note_fixture(tmp_path, text=text)
+        report = shared_notes.search_shared_notes_report(query, root=root)
+>       assert report["status"] == status
+E       AssertionError: assert 'error' == 'matched'
+E
+E         - matched
+E         + error
+
+test_evidence_coverage.py:28: AssertionError
+___ test_every_claimed_term_has_complete_visible_evidence[title-and-distant] ___
+
+tmp_path = PosixPath('/private/var/folders/3z/qg67zkkn0m5325qx65hvgh580000gn/T/pytest-of-oscarmoon/pytest-13005/test_every_claimed_term_has_co2')
+text = 'alpha                                                                                                                ...                                                                                                                  beta'
+query = 'point alpha beta', status = 'matched'
+
+    @pytest.mark.parametrize(
+        "text,query,status",
+        [
+            ("alpha " + " " * 600 + " beta", "alpha beta", "matched"),
+            ("alpha\n" * 4 + "beta", "alpha beta", "matched"),
+            ("alpha " + " " * 600 + " beta", "point alpha beta", "matched"),
+            ("alpha " + " " * 600 + " beta", "alpha beta banana", "partial"),
+        ],
+        ids=["distant-one-line", "repeated-prefix", "title-and-distant", "partial"],
+    )
+    def test_every_claimed_term_has_complete_visible_evidence(
+        tmp_path, text, query, status
+    ):
+        root, _, _ = _shared_note_fixture(tmp_path, text=text)
+        report = shared_notes.search_shared_notes_report(query, root=root)
+>       assert report["status"] == status
+E       AssertionError: assert 'error' == 'matched'
+E
+E         - matched
+E         + error
+
+test_evidence_coverage.py:28: AssertionError
+________ test_every_claimed_term_has_complete_visible_evidence[partial] ________
+
+tmp_path = PosixPath('/private/var/folders/3z/qg67zkkn0m5325qx65hvgh580000gn/T/pytest-of-oscarmoon/pytest-13005/test_every_claimed_term_has_co3')
+text = 'alpha                                                                                                                ...                                                                                                                  beta'
+query = 'alpha beta banana', status = 'partial'
+
+    @pytest.mark.parametrize(
+        "text,query,status",
+        [
+            ("alpha " + " " * 600 + " beta", "alpha beta", "matched"),
+            ("alpha\n" * 4 + "beta", "alpha beta", "matched"),
+            ("alpha " + " " * 600 + " beta", "point alpha beta", "matched"),
+            ("alpha " + " " * 600 + " beta", "alpha beta banana", "partial"),
+        ],
+        ids=["distant-one-line", "repeated-prefix", "title-and-distant", "partial"],
+    )
+    def test_every_claimed_term_has_complete_visible_evidence(
+        tmp_path, text, query, status
+    ):
+        root, _, _ = _shared_note_fixture(tmp_path, text=text)
+        report = shared_notes.search_shared_notes_report(query, root=root)
+>       assert report["status"] == status
+E       AssertionError: assert 'error' == 'partial'
+E
+E         - partial
+E         + error
+
+test_evidence_coverage.py:28: AssertionError
+=========================== short test summary info ============================
+FAILED test_evidence_coverage.py::test_every_claimed_term_has_complete_visible_evidence[distant-one-line]
+FAILED test_evidence_coverage.py::test_every_claimed_term_has_complete_visible_evidence[repeated-prefix]
+FAILED test_evidence_coverage.py::test_every_claimed_term_has_complete_visible_evidence[title-and-distant]
+FAILED test_evidence_coverage.py::test_every_claimed_term_has_complete_visible_evidence[partial]
+4 failed, 6 passed in 0.88s

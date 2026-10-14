@@ -1,0 +1,31 @@
+{
+  "source_revision": "8bfa47ee9ecf17c7a5c13514f5f8ccd9b21dfda4",
+  "source_sha256": "ac275d2f7332d8b87e455f44171e033b466a983b45d68ded8adbaf13c371b9f3",
+  "runtime": "../_venvs/qrv/bin/python -S",
+  "no_runtime_limit_changes": true,
+  "probes": [
+    {
+      "case": "nested",
+      "manifest_bytes": 4001,
+      "exit_code": 1,
+      "status": "error",
+      "code": "INVALID_EVIDENCE",
+      "stderr_empty": true
+    },
+    {
+      "case": "integer",
+      "manifest_bytes": 5011,
+      "exit_code": 1,
+      "status": "error",
+      "code": "INVALID_EVIDENCE",
+      "stderr_empty": true
+    },
+    {
+      "case": "restored-original",
+      "exit_code": 0,
+      "status": "verified",
+      "stderr_empty": true
+    }
+  ],
+  "red_receipt": "root-manifest-parser-red.json"
+}

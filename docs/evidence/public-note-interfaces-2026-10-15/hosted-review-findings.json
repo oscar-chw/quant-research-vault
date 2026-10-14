@@ -1,0 +1,33 @@
+{
+  "schema": "vault-hosted-review-findings/v1",
+  "reviewed_head": "6f577732c0843b8196cab979b18600c94c47c5f0",
+  "review_url": "https://github.com/oscar-chw/quant-research-vault/pull/1#pullrequestreview-5522830959",
+  "findings": [
+    {
+      "severity": "P2",
+      "topic": "Unicode folding must preserve matching source spans",
+      "url": "https://github.com/oscar-chw/quant-research-vault/pull/1#discussion_r4274764878"
+    },
+    {
+      "severity": "P2",
+      "topic": "Symlink loops must produce bounded source errors",
+      "url": "https://github.com/oscar-chw/quant-research-vault/pull/1#discussion_r4274764889"
+    }
+  ],
+  "initial_reproduction": {
+    "command": "python -m pytest -q test_review_boundaries.py --tb=short",
+    "exit_code": 1,
+    "result": "3failed1passed0.90s",
+    "log": "hosted-boundary-red.log",
+    "control": "Existing Stra\u00dfe span works before/after; \u0130stanbul boundary and source/root loops fail before repair."
+  },
+  "new_fixture_setup_defect": "Incorrect module binding reproduced and held; direct human approved the exact one-field target correction before applying. Every assertion and original check was retained.",
+  "source_sha256_after_repair": "6186de89a6ef31793cc8c40b5af857dc2ea37f172fe407e493351d21842a8638",
+  "prior_root_acceptance": "Scoped parser repair at6f57773 retained; does not certify these new changes.",
+  "fixture_correction": "approved-hosted-fixture-correction.json",
+  "corrected_control": {
+    "command": "python -m pytest -q test_review_boundaries.py",
+    "exit_code": 0,
+    "result": "4passed1.00s;loader/report/CLI/MCP boundaries exercised"
+  }
+}

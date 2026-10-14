@@ -1,0 +1,13 @@
+{
+  "tested_source_commit": "270819faa2283d99a023f4ee93957550b3097405",
+  "source_sha256": {
+    "shared_notes.py": "7c255b581c7f0a439d17dbed6f00e1a983e8433688a4878f00a0ba27100c4522",
+    "search_mcp.py": "83af113ff86041d3fa2e54510d9db0c5f62333bf381fa7d7381264e171f6b7ca",
+    "test_remaining_review_paths.py": "3c99938286a7ba1a3b36b48ed659a4c7d32a2f9d80340c81268ceb1c380a6d9c",
+    "test_pin_error_output.py": "6c71b058265f149dc09d2ae5aae6c35a56e79120e6808e84a1fa1e7a1fe94841"
+  },
+  "gate": "plan gate vault-pr 12 --owner codex-vault-pr",
+  "exit_code": 0,
+  "result": "144passed5.75s;RuffPASS;format48filesPASS;mypy14PASS;public-rangehistoryclean;overlapPASS",
+  "scope": "Newlateboundary/invalidpinerror repairs; original141checksand3notes preserved; finalhostedreview/CI still required"
+}

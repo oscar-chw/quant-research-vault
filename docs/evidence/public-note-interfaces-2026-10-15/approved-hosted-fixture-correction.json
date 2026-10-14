@@ -1,0 +1,11 @@
+{
+  "schema": "vault-approved-fixture-correction/v1",
+  "decision": "Approve the exact test-target correction",
+  "decision_origin": "Direct human response in root coordination; specific authorization relayed before applying",
+  "receipt_sha256": "57b64b007701c65d3e5e0bd5acab18c4b8b73db709ae8ef2fbca0ccff23445a0",
+  "patch_sha256": "bbc7130243b707d2ae99ae947b1d5da5fdc19175013517e6a43fb14b49422717",
+  "change": "One target replacement: search_mcp -> search_mcp.shared_notes",
+  "assertions_and_injection_preserved": true,
+  "prior_red_preserved": true,
+  "source_tests_and_original_notes_unchanged": true
+}

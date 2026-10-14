@@ -1,0 +1,28 @@
+{
+  "source_sha256": "a074fa8a27d82a489c2af7d884e4f9231a61750b7ddfd76c1cf12fe0d8103b4d",
+  "same_run": [
+    {
+      "case": "control",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "case": "first_match_windows",
+      "exit_code": 1,
+      "result": "KILLED by named assertions"
+    },
+    {
+      "case": "no_independent_coverage",
+      "exit_code": 1,
+      "result": "KILLED by named assertions"
+    },
+    {
+      "case": "uncaught_saved_path",
+      "exit_code": 1,
+      "result": "KILLED by named assertions"
+    }
+  ],
+  "scope": "Bounded citation coverage and saved-path structured errors only",
+  "formatted_source_sha256": "547a03d20a5e849aac9c55cf4795c4d5b6816d84ad0a7bcb152b0963b0081036",
+  "format_only_after_probe": true
+}

@@ -1,0 +1,83 @@
+{
+  "schema": "quant-shared-notes/v1",
+  "revision": "2026-10-14.1",
+  "documents": [
+    {
+      "id": "quant-pit-cutoffs-v1",
+      "document_type": "method_note",
+      "title": "Point-in-time availability and causal evaluation",
+      "path": "methods/pit-cutoffs.md",
+      "sha256": "26aad9cddaf210272d636f0fe8ee0846efbfe8b3ee3b57b87cd11876166a77f7",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/platform/packages/research/src/qrae/data_catalog.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/platform/packages/factor/src/factor_research/ohlcv.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    },
+    {
+      "id": "quant-pca-fit-state-v1",
+      "document_type": "method_note",
+      "title": "PCA fitted on training observations only",
+      "path": "methods/pca-fit-state.md",
+      "sha256": "80909971fff591ec83115ab252ed10c300cf86c24d47bf56eb7ae9e83eb748ff",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/afml/event_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/tests/test_feature_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    },
+    {
+      "id": "quant-ols-validation-v1",
+      "document_type": "method_note",
+      "title": "Linear-model fit state and cost-aware validation",
+      "path": "methods/ols-validation.md",
+      "sha256": "bdff9084bdcc8e1f7b821e8bab10d4978d10fde66de4dd1b0922f42b415c08c7",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/vol.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/tests/test_vol.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/afml/tuning.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    }
+  ]
+}

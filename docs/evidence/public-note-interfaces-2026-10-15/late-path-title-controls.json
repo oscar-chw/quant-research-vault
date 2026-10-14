@@ -1,0 +1,24 @@
+{
+  "source_sha256": "f29f96801f0a3633ad23263a6d8e5225b11533838acb0b37d2fb4c73cbcbb1db",
+  "same_run": [
+    {
+      "case": "control",
+      "target": "test_remaining_review_paths.py",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "case": "uncaught_invalid_path",
+      "target": "test_remaining_review_paths.py::test_escaped_nul_source_path_is_a_bounded_error",
+      "exit_code": 1,
+      "result": "KILLED by named behavior assertion"
+    },
+    {
+      "case": "allow_overlong_titles",
+      "target": "test_remaining_review_paths.py::test_title_budget_keeps_every_title_match_inside_evidence",
+      "exit_code": 1,
+      "result": "KILLED by named behavior assertion"
+    }
+  ],
+  "scope": "PathNUL translation and512Unicode-character method-title limit; v1windowshape/pins unchanged"
+}

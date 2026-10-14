@@ -1,0 +1,16 @@
+{
+  "source_sha256": "b0e45b7bd8cb43ce10695dbea62293b669566f5fee1bbc90d0659db52ba2a60f",
+  "same_run": [
+    {
+      "case": "control",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "case": "unsafe_initial_echo",
+      "exit_code": 1,
+      "result": "KILLED by named assertions"
+    }
+  ],
+  "scope": "Every earlyerror safely initialized; priorquery/limit errorcode precedence and validpinecho retained"
+}

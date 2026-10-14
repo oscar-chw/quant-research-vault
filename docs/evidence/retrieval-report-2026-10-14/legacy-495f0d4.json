@@ -1,0 +1,194 @@
+{
+  "availability": [
+    {
+      "document_id": "quant-pit-cutoffs-v1",
+      "document_type": "method_note",
+      "title": "Point-in-time availability and causal evaluation",
+      "document": "id: quant-pit-cutoffs-v1\ntitle: Point-in-time availability and causal evaluation\n\nA timestamp describing the market event is not necessarily the time a researcher could use it. A historical view must apply the declared availability cutoff, retain source identity and preserve later corrections as separate versions. A decision made at time t may use only observations available by t.\n\nFreeze the dataset version, decision clock, label interval and cost assumptions before evaluation. Inspect boundary cases at the cutoff, missing observations and revisions. History reused by multiple estimators is not automatically future leakage; fitting on unavailable information or selecting with later evaluation outcomes is the problem.\n\nA reproducible result names its inputs and clock conventions. Passing these data checks supports causal access, not predictive skill or profitable trading. The cited public implementation and tests illustrate the boundary on their stated data scope.\n",
+      "source_sha256": "26aad9cddaf210272d636f0fe8ee0846efbfe8b3ee3b57b87cd11876166a77f7",
+      "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/platform/packages/research/src/qrae/data_catalog.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/platform/packages/factor/src/factor_research/ohlcv.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    }
+  ],
+  "PCA training": [
+    {
+      "document_id": "quant-pca-fit-state-v1",
+      "document_type": "method_note",
+      "title": "PCA fitted on training observations only",
+      "document": "id: quant-pca-fit-state-v1\ntitle: PCA fitted on training observations only\n\nPCA is a fitted transform. Missing-value imputation, centering, scaling and component directions must be estimated from the training rows, then reused unchanged when transforming validation or later observations. Fitting the transform on the complete evaluation dataset leaks information about its distribution.\n\nRetain training-row identity, cutoff, input version, fitted medians, means, scales, component vectors, retained rank and numeric precision. A code hash alone does not identify learned state. Constant features, missing values and rank-deficient inputs need an explicit policy rather than silent division by zero.\n\nOrthogonal components and high explained variance do not establish useful forecasts. Compare the downstream model with an appropriate baseline on later observations. The cited fold implementation and its training-only test provide a concrete example, with its own dtype and numerical limits.\n",
+      "source_sha256": "80909971fff591ec83115ab252ed10c300cf86c24d47bf56eb7ae9e83eb748ff",
+      "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/afml/event_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/tests/test_feature_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    },
+    {
+      "document_id": "quant-ols-validation-v1",
+      "document_type": "method_note",
+      "title": "Linear-model fit state and cost-aware validation",
+      "document": "id: quant-ols-validation-v1\ntitle: Linear-model fit state and cost-aware validation\n\nA linear model estimates coefficients from a specified design matrix and target. Record the intercept choice, feature units, target horizon, training rows, fitted coefficients and any preprocessing. Winsorisation or scaling learned from training data must not be silently refitted on held-out outcomes.\n\nCheck a known numerical relation and adverse inputs before using market data. Then separate fitting, hyperparameter selection and later evaluation. Include costs, turnover and the meaning of fills; a signal correlation is not the same quantity as executable net performance.\n\nReport uncertainty, a simple comparator and negative results. Sampler convergence, a passing implementation test or a more complex model does not prove economic edge. The cited HAR model is a particular volatility regression example, not a general profitable strategy or a risk-neutral pricing model.\n",
+      "source_sha256": "bdff9084bdcc8e1f7b821e8bab10d4978d10fde66de4dd1b0922f42b415c08c7",
+      "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/vol.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/tests/test_vol.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/afml/tuning.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    }
+  ],
+  "PCA banana": [
+    {
+      "document_id": "quant-pca-fit-state-v1",
+      "document_type": "method_note",
+      "title": "PCA fitted on training observations only",
+      "document": "id: quant-pca-fit-state-v1\ntitle: PCA fitted on training observations only\n\nPCA is a fitted transform. Missing-value imputation, centering, scaling and component directions must be estimated from the training rows, then reused unchanged when transforming validation or later observations. Fitting the transform on the complete evaluation dataset leaks information about its distribution.\n\nRetain training-row identity, cutoff, input version, fitted medians, means, scales, component vectors, retained rank and numeric precision. A code hash alone does not identify learned state. Constant features, missing values and rank-deficient inputs need an explicit policy rather than silent division by zero.\n\nOrthogonal components and high explained variance do not establish useful forecasts. Compare the downstream model with an appropriate baseline on later observations. The cited fold implementation and its training-only test provide a concrete example, with its own dtype and numerical limits.\n",
+      "source_sha256": "80909971fff591ec83115ab252ed10c300cf86c24d47bf56eb7ae9e83eb748ff",
+      "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/afml/event_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/tests/test_feature_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    }
+  ],
+  "PCA in banana": [
+    {
+      "document_id": "quant-pca-fit-state-v1",
+      "document_type": "method_note",
+      "title": "PCA fitted on training observations only",
+      "document": "id: quant-pca-fit-state-v1\ntitle: PCA fitted on training observations only\n\nPCA is a fitted transform. Missing-value imputation, centering, scaling and component directions must be estimated from the training rows, then reused unchanged when transforming validation or later observations. Fitting the transform on the complete evaluation dataset leaks information about its distribution.\n\nRetain training-row identity, cutoff, input version, fitted medians, means, scales, component vectors, retained rank and numeric precision. A code hash alone does not identify learned state. Constant features, missing values and rank-deficient inputs need an explicit policy rather than silent division by zero.\n\nOrthogonal components and high explained variance do not establish useful forecasts. Compare the downstream model with an appropriate baseline on later observations. The cited fold implementation and its training-only test provide a concrete example, with its own dtype and numerical limits.\n",
+      "source_sha256": "80909971fff591ec83115ab252ed10c300cf86c24d47bf56eb7ae9e83eb748ff",
+      "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/afml/event_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/tests/test_feature_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    },
+    {
+      "document_id": "quant-pit-cutoffs-v1",
+      "document_type": "method_note",
+      "title": "Point-in-time availability and causal evaluation",
+      "document": "id: quant-pit-cutoffs-v1\ntitle: Point-in-time availability and causal evaluation\n\nA timestamp describing the market event is not necessarily the time a researcher could use it. A historical view must apply the declared availability cutoff, retain source identity and preserve later corrections as separate versions. A decision made at time t may use only observations available by t.\n\nFreeze the dataset version, decision clock, label interval and cost assumptions before evaluation. Inspect boundary cases at the cutoff, missing observations and revisions. History reused by multiple estimators is not automatically future leakage; fitting on unavailable information or selecting with later evaluation outcomes is the problem.\n\nA reproducible result names its inputs and clock conventions. Passing these data checks supports causal access, not predictive skill or profitable trading. The cited public implementation and tests illustrate the boundary on their stated data scope.\n",
+      "source_sha256": "26aad9cddaf210272d636f0fe8ee0846efbfe8b3ee3b57b87cd11876166a77f7",
+      "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/platform/packages/research/src/qrae/data_catalog.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/platform/packages/factor/src/factor_research/ohlcv.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    }
+  ],
+  "how do I price options": [
+    {
+      "document_id": "quant-pca-fit-state-v1",
+      "document_type": "method_note",
+      "title": "PCA fitted on training observations only",
+      "document": "id: quant-pca-fit-state-v1\ntitle: PCA fitted on training observations only\n\nPCA is a fitted transform. Missing-value imputation, centering, scaling and component directions must be estimated from the training rows, then reused unchanged when transforming validation or later observations. Fitting the transform on the complete evaluation dataset leaks information about its distribution.\n\nRetain training-row identity, cutoff, input version, fitted medians, means, scales, component vectors, retained rank and numeric precision. A code hash alone does not identify learned state. Constant features, missing values and rank-deficient inputs need an explicit policy rather than silent division by zero.\n\nOrthogonal components and high explained variance do not establish useful forecasts. Compare the downstream model with an appropriate baseline on later observations. The cited fold implementation and its training-only test provide a concrete example, with its own dtype and numerical limits.\n",
+      "source_sha256": "80909971fff591ec83115ab252ed10c300cf86c24d47bf56eb7ae9e83eb748ff",
+      "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+      "source_refs": [
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/src/pmlab/afml/event_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        },
+        {
+          "uri": "https://github.com/oscar-chw/agentic-quant-research/blob/f8c48256e12b96523807ba8f59c04b798517e04e/tests/test_feature_importance.py",
+          "kind": "public_code",
+          "revision": "f8c48256e12b96523807ba8f59c04b798517e04e"
+        }
+      ],
+      "rights": {
+        "license": "MIT",
+        "basis": "original_summary",
+        "redistribution": "public"
+      }
+    }
+  ],
+  "zirconium": [],
+  "": []
+}

@@ -1,0 +1,18 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+______ test_empty_shared_cli_value_never_starts_server[--shared-query-0] _______
+test_hosted_contract_edges.py:127: in test_empty_shared_cli_value_never_starts_server
+    assert run.returncode == expected
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['<portfolio-workspace>/_venvs/qrv/bin/python', '-c', '\nimport runpy, sys, ...l:\n    \n  File "<string>", line 5, in forbid_server\nAssertionError: explicit shared argument entered server mode\n').returncode
+_______ test_empty_shared_cli_value_never_starts_server[--shared-note-1] _______
+test_hosted_contract_edges.py:128: in test_empty_shared_cli_value_never_starts_server
+    assert "entered server mode" not in run.stderr and "Traceback" not in run.stderr
+E   AssertionError: assert ('entered server mode' not in 'Traceback (...erver mode\n'
+E
+E     'entered server mode' is contained here:
+E        argument entered server mode)
+=========================== short test summary info ============================
+FAILED test_hosted_contract_edges.py::test_empty_shared_cli_value_never_starts_server[--shared-query-0]
+FAILED test_hosted_contract_edges.py::test_empty_shared_cli_value_never_starts_server[--shared-note-1]
+2 failed in 1.54s

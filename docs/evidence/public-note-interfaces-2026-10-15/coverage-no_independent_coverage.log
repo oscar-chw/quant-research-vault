@@ -1,0 +1,87 @@
+....FFF...                                                               [100%]
+=================================== FAILURES ===================================
+_ test_unrepresentable_claims_are_bounded_errors[more-than-three-separated-terms] _
+
+tmp_path = PosixPath('/private/var/folders/3z/qg67zkkn0m5325qx65hvgh580000gn/T/pytest-of-oscarmoon/pytest-13007/test_unrepresentable_claims_ar0')
+text = 'alpha\nbeta\ngamma\ndelta', query = 'alpha beta gamma delta'
+
+    @pytest.mark.parametrize(
+        "text,query",
+        [
+            ("\n".join(["alpha", "beta", "gamma", "delta"]), "alpha beta gamma delta"),
+            ("x" * 600, "x" * 600),
+        ],
+        ids=["more-than-three-separated-terms", "term-longer-than-window"],
+    )
+    def test_unrepresentable_claims_are_bounded_errors(tmp_path, text, query):
+        root, _, _ = _shared_note_fixture(tmp_path, text=text)
+        report = shared_notes.search_shared_notes_report(query, root=root)
+>       assert report["status"] == "error" and report["results"] == []
+E       AssertionError: assert ('matched' == 'error'
+E
+E         - error
+E         + matched)
+
+test_evidence_coverage.py:54: AssertionError
+___ test_unrepresentable_claims_are_bounded_errors[term-longer-than-window] ____
+
+tmp_path = PosixPath('/private/var/folders/3z/qg67zkkn0m5325qx65hvgh580000gn/T/pytest-of-oscarmoon/pytest-13007/test_unrepresentable_claims_ar1')
+text = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+query = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+    @pytest.mark.parametrize(
+        "text,query",
+        [
+            ("\n".join(["alpha", "beta", "gamma", "delta"]), "alpha beta gamma delta"),
+            ("x" * 600, "x" * 600),
+        ],
+        ids=["more-than-three-separated-terms", "term-longer-than-window"],
+    )
+    def test_unrepresentable_claims_are_bounded_errors(tmp_path, text, query):
+        root, _, _ = _shared_note_fixture(tmp_path, text=text)
+        report = shared_notes.search_shared_notes_report(query, root=root)
+>       assert report["status"] == "error" and report["results"] == []
+E       AssertionError: assert ('matched' == 'error'
+E
+E         - error
+E         + matched)
+
+test_evidence_coverage.py:54: AssertionError
+__________ test_verifier_refuses_uncited_claim_even_if_replay_agrees ___________
+
+tmp_path = PosixPath('/private/var/folders/3z/qg67zkkn0m5325qx65hvgh580000gn/T/pytest-of-oscarmoon/pytest-13007/test_verifier_refuses_uncited_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10dd33b90>
+
+    def test_verifier_refuses_uncited_claim_even_if_replay_agrees(tmp_path, monkeypatch):
+        root, _, _ = _shared_note_fixture(tmp_path, text="alpha beta")
+        report = shared_notes.search_shared_notes_report("alpha beta", root=root)
+        assert (
+            shared_notes.verify_shared_notes_report(report, root=root)["status"]
+            == "verified"
+        )
+        changed = copy.deepcopy(report)
+        changed["results"][0]["evidence"] = [
+            {
+                "kind": "source_text",
+                "line": 1,
+                "start_char": 0,
+                "end_char": 5,
+                "text": "alpha",
+            }
+        ]
+        monkeypatch.setattr(
+            shared_notes, "search_shared_notes_report", lambda *_a, **_kw: changed
+        )
+        outcome = shared_notes.verify_shared_notes_report(changed, root=root)
+>       assert outcome["status"] == "error"
+E       AssertionError: assert 'verified' == 'error'
+E
+E         - error
+E         + verified
+
+test_evidence_coverage.py:80: AssertionError
+=========================== short test summary info ============================
+FAILED test_evidence_coverage.py::test_unrepresentable_claims_are_bounded_errors[more-than-three-separated-terms]
+FAILED test_evidence_coverage.py::test_unrepresentable_claims_are_bounded_errors[term-longer-than-window]
+FAILED test_evidence_coverage.py::test_verifier_refuses_uncited_claim_even_if_replay_agrees
+3 failed, 7 passed in 0.81s

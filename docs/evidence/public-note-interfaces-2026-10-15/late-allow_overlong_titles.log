@@ -1,0 +1,12 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+__ test_title_budget_keeps_every_title_match_inside_evidence[overlong-title] ___
+test_remaining_review_paths.py:99: in test_title_budget_keeps_every_title_match_inside_evidence
+    assert report["status"] == "error" and report["results"] == []
+E   AssertionError: assert ('matched' == 'error'
+E
+E     - error
+E     + matched)
+=========================== short test summary info ============================
+FAILED test_remaining_review_paths.py::test_title_budget_keeps_every_title_match_inside_evidence[overlong-title]
+1 failed, 1 passed in 0.64s

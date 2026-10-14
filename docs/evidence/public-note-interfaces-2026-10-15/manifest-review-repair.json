@@ -1,0 +1,30 @@
+{
+  "schema": "vault-manifest-parser-review/v1",
+  "reviewed_original_sha256": "ac275d2f7332d8b87e455f44171e033b466a983b45d68ded8adbaf13c371b9f3",
+  "review_verdict": "REVISE",
+  "failures": [
+    "duplicate rights accepted",
+    "nonfinite metadata admitted",
+    "lone surrogate metadata not encodable",
+    "overflowed numeric metadata not finite"
+  ],
+  "before": {
+    "command": "python -m pytest -q test_manifest_boundary.py --tb=short",
+    "exit_code": 1,
+    "result": "4 failed in 0.86s",
+    "log": "manifest-review-red.log"
+  },
+  "after_focused": {
+    "command": "python -m pytest -q test_manifest_boundary.py",
+    "exit_code": 0,
+    "result": "4 passed in 0.69s"
+  },
+  "current_source_sha256": "6bf4036181cc56cfa4c0bec36926abb2955e268367537b2c8018260fdb773781",
+  "additive_test_sha256": "db147bf47b44dca1cab9d8bb9eb0e05d05e03dabf44c498305bf3f3d3a6cb6c4",
+  "correction": "Reject duplicate fields/nonfinite constants while decoding; validate finite UTF-8 JSON metadata; existing safe error translation unchanged.",
+  "invariants": [
+    "No original assertion or runtime limit changed",
+    "Original notes and120tests preserved",
+    "Legacy valid note envelopes unchanged"
+  ]
+}

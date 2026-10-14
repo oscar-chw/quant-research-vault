@@ -1,0 +1,48 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+__ test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp[source] __
+<python-runtime>/lib/python3.11/pathlib.py:1003: in resolve
+    p.stat()
+<python-runtime>/lib/python3.11/pathlib.py:1013: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OSError: [Errno 62] Too many levels of symbolic links: '<temporary>/test_symlink_loops_are_bounded0/notes/methods/pit-cutoffs.md'
+
+During handling of the above exception, another exception occurred:
+test_review_boundaries.py:75: in test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp
+    shared_notes.load_shared_notes(notes)
+shared_notes.py:184: in load_shared_notes
+    return _load_shared_snapshot(
+shared_notes.py:139: in _load_shared_snapshot
+    source = (vault_root / source_path).resolve()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<python-runtime>/lib/python3.11/pathlib.py:1005: in resolve
+    check_eloop(e)
+<python-runtime>/lib/python3.11/pathlib.py:990: in check_eloop
+    raise RuntimeError("Symlink loop from %r" % e.filename)
+E   RuntimeError: Symlink loop from '<temporary>/test_symlink_loops_are_bounded0/notes/methods/pit-cutoffs.md'
+___ test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp[root] ___
+<python-runtime>/lib/python3.11/pathlib.py:1003: in resolve
+    p.stat()
+<python-runtime>/lib/python3.11/pathlib.py:1013: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OSError: [Errno 62] Too many levels of symbolic links: '<temporary>/test_symlink_loops_are_bounded1/root-loop'
+
+During handling of the above exception, another exception occurred:
+test_review_boundaries.py:75: in test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp
+    shared_notes.load_shared_notes(notes)
+shared_notes.py:184: in load_shared_notes
+    return _load_shared_snapshot(
+shared_notes.py:57: in _load_shared_snapshot
+    vault_root = Path(root).resolve()
+                 ^^^^^^^^^^^^^^^^^^^^
+<python-runtime>/lib/python3.11/pathlib.py:1005: in resolve
+    check_eloop(e)
+<python-runtime>/lib/python3.11/pathlib.py:990: in check_eloop
+    raise RuntimeError("Symlink loop from %r" % e.filename)
+E   RuntimeError: Symlink loop from '<temporary>/test_symlink_loops_are_bounded1/root-loop'
+=========================== short test summary info ============================
+FAILED test_review_boundaries.py::test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp[source]
+FAILED test_review_boundaries.py::test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp[root]
+2 failed in 1.06s

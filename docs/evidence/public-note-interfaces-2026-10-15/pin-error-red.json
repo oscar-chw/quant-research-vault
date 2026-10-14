@@ -1,0 +1,7 @@
+{
+  "command": "python -m pytest -q test_pin_error_output.py --tb=short",
+  "exit_code": 1,
+  "result": "3 failed in 0.03s",
+  "source_sha256": "f29f96801f0a3633ad23263a6d8e5225b11533838acb0b37d2fb4c73cbcbb1db",
+  "scope": "Invalidpin errors echo unencodable/opaque/oversized input; no original test criteria changed"
+}

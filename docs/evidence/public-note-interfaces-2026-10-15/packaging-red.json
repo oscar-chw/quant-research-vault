@@ -1,0 +1,13 @@
+{
+  "command": "plan gate vault-pr 5",
+  "source_commit": "635fa61",
+  "exit_code": 1,
+  "result": "2failed122passed in59.73s",
+  "failure": "Two immutable baseline fixtures omitted from candidate packaging",
+  "restored_unchanged": [
+    "docs/evidence/retrieval-report-2026-10-14/legacy-495f0d4.json",
+    "docs/evidence/retrieval-report-2026-10-14/preserved-controls.json"
+  ],
+  "original_tests_unchanged": true,
+  "raw_gate_output_retained_locally": true
+}

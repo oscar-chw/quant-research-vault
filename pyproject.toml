@@ -13,5 +13,6 @@ check_untyped_defs = true
 files = [
   "fetch.py", "sync.py", "search_mcp.py", "process.py", "run.py", "research.py",
   "master.py", "install.py", "list_pending.py", "mark_analyzed.py", "doctor.py",
+  "shared_notes.py",
   "scripts/generate-copilot-context.py", "test_quality.py",
 ]

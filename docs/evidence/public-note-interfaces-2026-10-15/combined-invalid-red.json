@@ -1,0 +1,10 @@
+{
+  "reviewed_head": "577483e2aaa40584782b75ed60c44d6f88339311",
+  "command": "python -m pytest -q test_combined_invalid_inputs.py --tb=short",
+  "exit_code": 1,
+  "result": "5 failed, 1 passed in 0.09s",
+  "source_sha256": "7c255b581c7f0a439d17dbed6f00e1a983e8433688a4878f00a0ba27100c4522",
+  "control": "Validpin still echoed with originalqueryerror precedence",
+  "root_receipt": "root-qrv-577-error-precedence-20261015.json",
+  "scope": "No original errorcode/precedence or assertion change"
+}

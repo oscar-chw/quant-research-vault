@@ -1,0 +1,21 @@
+{
+  "schema": "vault-hosted-contract-repair/v1",
+  "reviewed_head": "e92e1721a36ba6295e03b70dcb07ef4c604282d6",
+  "review": "https://github.com/oscar-chw/quant-research-vault/pull/1#pullrequestreview-5523196482",
+  "findings": [
+    "discussion_r4275060066",
+    "discussion_r4275060082",
+    "discussion_r4275060099"
+  ],
+  "focused_command": "python -m pytest -q test_hosted_contract_edges.py",
+  "focused_result": "9PASS1.57s",
+  "controls": "contract-mutation-controls.json;greencontrol/fourmutantsKILLED",
+  "source_sha256": {
+    "shared_notes.py": "b50508d094c988134a030bd1544420f32a257e07d20f1f13eb8025b5a3393d40",
+    "search_mcp.py": "83af113ff86041d3fa2e54510d9db0c5f62333bf381fa7d7381264e171f6b7ca",
+    "test_hosted_contract_edges.py": "eda23103fbc6f324a2fda639b6630d0fb52662c919670f32f2863bc606095c95"
+  },
+  "original_checks_unchanged": true,
+  "server_started": false,
+  "scope": "Mixed provenance and byte budgets/explicit-empty CLI; fresh full gate/hosted re-review still required"
+}

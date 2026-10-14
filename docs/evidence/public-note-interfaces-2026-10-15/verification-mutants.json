@@ -1,0 +1,42 @@
+[
+  {
+    "name": "skip_policy_comparison",
+    "target": "verify_shared_notes_report",
+    "test": "test_single_field_or_structure_change_is_refused",
+    "exit_code": 1,
+    "function_sha256": "312bf43911f01a65b6776f2f81d55ac1dd3a610383c15ceee2c296efca4c8261",
+    "result": "KILLED; named behavioral assertion fails, not import/collection failure"
+  },
+  {
+    "name": "coerce_json_types",
+    "target": "verify_shared_notes_report",
+    "test": "test_single_field_or_structure_change_is_refused",
+    "exit_code": 1,
+    "function_sha256": "312bf43911f01a65b6776f2f81d55ac1dd3a610383c15ceee2c296efca4c8261",
+    "result": "KILLED; named behavioral assertion fails, not import/collection failure"
+  },
+  {
+    "name": "skip_independent_citations",
+    "target": "_citations_match_sources",
+    "test": "test_verifier_checks_source_even_if_producer_repeats_the_bad_quote",
+    "exit_code": 1,
+    "function_sha256": "0e855ba9bcd1b459b6eb79b5ef3b35e71455cefbdc65fc12295a694bf67ad2ba",
+    "result": "KILLED; named behavioral assertion fails, not import/collection failure"
+  },
+  {
+    "name": "unbounded_input_read",
+    "target": "verify_shared_notes_report_file",
+    "test": "test_large_file_read_stops_at_the_declared_byte_bound",
+    "exit_code": 1,
+    "function_sha256": "93e7597f5b355526cc50fa1865f8c053885573df622b47f5a0910f00d09e0114",
+    "result": "KILLED; named behavioral assertion fails, not import/collection failure"
+  },
+  {
+    "name": "last_duplicate_key_wins",
+    "target": "_unique_report_fields",
+    "test": "test_duplicate_key_in_an_otherwise_valid_report_is_refused",
+    "exit_code": 1,
+    "function_sha256": "6d8487c8f6d220017c4cfb50d886eb02ab7ea6e595a91f22a953df2523a52e95",
+    "result": "KILLED; named behavioral assertion fails, not import/collection failure"
+  }
+]

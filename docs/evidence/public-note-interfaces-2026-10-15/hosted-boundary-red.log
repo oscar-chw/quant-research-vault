@@ -1,0 +1,54 @@
+F.FF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_folded_word_matches_have_exact_original_source_spans[\u0130stanbul-\u0130stanbul observations.-\u0130stanbul] _
+test_review_boundaries.py:49: in test_folded_word_matches_have_exact_original_source_spans
+    assert all(item["kind"] == "source_text" for item in evidence)
+E   assert False
+E    +  where False = all(<generator object test_folded_word_matches_have_exact_original_source_spans.<locals>.<genexpr> at 0x110e7e4d0>)
+__ test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp[source] __
+<python-runtime>/lib/python3.11/pathlib.py:1003: in resolve
+    p.stat()
+<python-runtime>/lib/python3.11/pathlib.py:1013: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OSError: [Errno 62] Too many levels of symbolic links: '<temporary>/test_symlink_loops_are_bounded0/notes/methods/pit-cutoffs.md'
+
+During handling of the above exception, another exception occurred:
+test_review_boundaries.py:75: in test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp
+    shared_notes.load_shared_notes(notes)
+shared_notes.py:181: in load_shared_notes
+    return _load_shared_snapshot(
+shared_notes.py:135: in _load_shared_snapshot
+    source = (vault_root / source_path).resolve()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<python-runtime>/lib/python3.11/pathlib.py:1005: in resolve
+    check_eloop(e)
+<python-runtime>/lib/python3.11/pathlib.py:990: in check_eloop
+    raise RuntimeError("Symlink loop from %r" % e.filename)
+E   RuntimeError: Symlink loop from '<temporary>/test_symlink_loops_are_bounded0/notes/methods/pit-cutoffs.md'
+___ test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp[root] ___
+<python-runtime>/lib/python3.11/pathlib.py:1003: in resolve
+    p.stat()
+<python-runtime>/lib/python3.11/pathlib.py:1013: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OSError: [Errno 62] Too many levels of symbolic links: '<temporary>/test_symlink_loops_are_bounded1/root-loop'
+
+During handling of the above exception, another exception occurred:
+test_review_boundaries.py:75: in test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp
+    shared_notes.load_shared_notes(notes)
+shared_notes.py:181: in load_shared_notes
+    return _load_shared_snapshot(
+shared_notes.py:56: in _load_shared_snapshot
+    vault_root = Path(root).resolve()
+                 ^^^^^^^^^^^^^^^^^^^^
+<python-runtime>/lib/python3.11/pathlib.py:1005: in resolve
+    check_eloop(e)
+<python-runtime>/lib/python3.11/pathlib.py:990: in check_eloop
+    raise RuntimeError("Symlink loop from %r" % e.filename)
+E   RuntimeError: Symlink loop from '<temporary>/test_symlink_loops_are_bounded1/root-loop'
+=========================== short test summary info ============================
+FAILED test_review_boundaries.py::test_folded_word_matches_have_exact_original_source_spans[\u0130stanbul-\u0130stanbul observations.-\u0130stanbul]
+FAILED test_review_boundaries.py::test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp[source]
+FAILED test_review_boundaries.py::test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp[root]
+3 failed, 1 passed in 0.90s

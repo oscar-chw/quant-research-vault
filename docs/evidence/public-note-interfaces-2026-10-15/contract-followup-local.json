@@ -1,0 +1,12 @@
+{
+  "tested_source_commit": "3762aae37b2c8d9595ff376ed7288661fe06271c",
+  "source_sha256": {
+    "shared_notes.py": "b50508d094c988134a030bd1544420f32a257e07d20f1f13eb8025b5a3393d40",
+    "search_mcp.py": "83af113ff86041d3fa2e54510d9db0c5f62333bf381fa7d7381264e171f6b7ca",
+    "test_hosted_contract_edges.py": "eda23103fbc6f324a2fda639b6630d0fb52662c919670f32f2863bc606095c95"
+  },
+  "command": "plan gate vault-pr 10 --owner codex-vault-pr",
+  "exit_code": 0,
+  "result": "137passed5.26s;RuffPASS;format44filesPASS;mypy14PASS;public-rangeprivacyclean;overlapPASS",
+  "scope": "Three actual hosted contract findings plus nine causal cases/four killed mutants; final hostedreview/CI still required"
+}

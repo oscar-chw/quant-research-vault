@@ -1,0 +1,20 @@
+{
+  "schema": "vault-hosted-followup-local/v1",
+  "tested_source_commit": "4be8cc90611067a3236ec79bf7b5743be1d502c2",
+  "source_sha256": {
+    "shared_notes.py": "6186de89a6ef31793cc8c40b5af857dc2ea37f172fe407e493351d21842a8638",
+    "search_mcp.py": "eb5528442c5e7cda305cf47e864916ad26fb2ba8a20163f53c38f4e9831cf88d",
+    "test_quality.py": "07f6e1cf50af8b78b1438a4ae40e4c9325898fdd46a06f8bf137dd0e7c9530a8",
+    "test_shared_report.py": "78d5c65eeaa52290f212635341c4cbf6e63f12b0fee1e999f806136829c5995b",
+    "test_saved_report.py": "565b68c07a3a6c7da5c29e8d15dccd3e0986a2d48b563df41f5c55a41f66aa0f",
+    "test_manifest_boundary.py": "db147bf47b44dca1cab9d8bb9eb0e05d05e03dabf44c498305bf3f3d3a6cb6c4",
+    "test_review_boundaries.py": "e8231992ba15301229e18efdcd0341a4736234a5571bdac5a62f09a885b1dc9a",
+    "notes/manifest.json": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a"
+  },
+  "command": "plan gate vault-pr 8 --owner codex-vault-pr",
+  "exit_code": 0,
+  "result": "128passed3.28s;RuffPASS;format41filesPASS;mypy14PASS;public-rangeprivacyclean;overlapPASS",
+  "regression": "4PASS1.00s, causalred3FAIL1PASS retained; wrong-offset/uncaught-loop mutantsKILLED",
+  "check_correction": "Exact one-field fixture target approved by human; no assertions changed",
+  "hosted_final_review": "PENDING on forthcoming final head"
+}
