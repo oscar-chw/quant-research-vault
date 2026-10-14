@@ -84,7 +84,8 @@ verifier's size bound, and empty explicit shared CLI options could start server
 mode. Node9 stays open. Repair these actual contract failures, preserving the
 earlier128-test result and all previous findings.
 
-- [>] 10. Repair mixed-title evidence, producer budgets and explicit-empty CLI routing | needs: 8 | ctx: shared_notes.py,search_mcp.py,docs/release-review.md | owner: codex-vault-pr | lease: 2026-10-14T19:20:04Z | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+- [x] 10. Repair mixed-title evidence, producer budgets and explicit-empty CLI routing | needs: 8 | ctx: shared_notes.py,search_mcp.py,docs/release-review.md | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+      2026-10-14T19:31:52Z exit 0 in 7s [3a84fd71] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))
 
 - [x] 8. Repair hosted Unicode-span and symlink-loop findings with causal boundary controls | needs: 7 | ctx: shared_notes.py,docs/release-review.md | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
       2026-10-14T18:55:23Z exit 0 in 5s [79886841] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))

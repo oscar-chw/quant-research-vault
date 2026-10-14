@@ -7,3 +7,16 @@ ctx: shared_notes.py,search_mcp.py,docs/release-review.md
 ## Summary 2026-10-14T19:31:44Z — local author (identity omitted)
 
 Hosted review5523196482/e92 found3P2s: mixed-title evidence, unverifiable oversize producer output, falsey emptyCLI options startingserver. Nine new cases reproduced7FAIL2PASS; now9PASS1.57s. Four targeted source mutants killed with same-run greencontrol; server witness blocks entry before lock acquisition. Implemented titlewindowreservationwithin3,16KiB UTF8query admission/no invalidecho, actual prettyUTF8report+newline1MiBbudget, and presence-based emptyCLI mode selection. Only case displayIDs shortened for readable diagnostics; assertions/inputvalues unchanged. Source format/lint/mypyPASS. Original128tests/notes preserved; full required gate follows after committed publication-safe evidence.
+
+## Attempt 2026-10-14T19:31:52Z — local author (identity omitted) — 7s — exit 0
+
+```
+........................................................................ [ 52%]
+.................................................................        [100%]
+137 passed in 5.26s
+All checks passed!
+44 files already formatted
+Success: no issues found in 14 source files
+.: clean
+overlap: PASS (0 file(s))
+```
