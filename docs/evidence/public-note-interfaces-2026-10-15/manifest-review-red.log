@@ -23,4 +23,3 @@ FAILED test_manifest_boundary.py::test_malformed_manifest_is_refused_by_report_c
 FAILED test_manifest_boundary.py::test_malformed_manifest_is_refused_by_report_cli_and_note_loader[surrogate_title]
 FAILED test_manifest_boundary.py::test_malformed_manifest_is_refused_by_report_cli_and_note_loader[overflow_value]
 4 failed in 0.86s
-

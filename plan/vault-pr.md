@@ -17,7 +17,8 @@ Done-condition: `plan gate vault-pr 7` requires the PR head to equal the local H
      irreversible effect `risk: irreversible` and the orchestrator will hold it
      for a human instead of running it unattended. -->
 
-- [>] 5. Prepare the public candidate from accepted code, verify quality and privacy | needs: 4 | ctx: README.md,docs/release-review.md | owner: codex-vault-pr | lease: 2026-10-14T18:07:34Z | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+- [ ] 5. Prepare the public candidate from accepted code, verify quality and privacy | needs: 4 | ctx: README.md,docs/release-review.md | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+      2026-10-14T18:17:20Z exit 1 in 67s [3b177b43] — FAILED test_saved_report.py::test_original_corpus_and_checks_remain_byte_identical / FAILED test_shared_report.py::test_legacy_queries_remain_exactly_495f0d4 - Fi... / 2 failed, 122 passed in 59.73s
 - [ ] 6. Record independent Codex review of the public implementation diff | needs: 5 | ctx: docs/release-review.md | gate: test -s review/vault-pr.md && grep -q '^VERDICT: ADVANCE' review/vault-pr.md
 - [ ] 7. Open the review PR and verify successful remote CI at the exact final head | needs: 6 | ctx: docs/release-review.md | gate: test "$(gh pr view codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault --json headRefOid --jq .headRefOid)" = "$(git rev-parse HEAD)" && gh pr checks codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault
 
