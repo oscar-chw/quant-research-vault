@@ -28,5 +28,10 @@
   ],
   "additive_test": "test_manifest_boundary.py",
   "presentation_and_evidence": "README/docs/public evidence and PR plan only; historical local branches preserved",
-  "prior_acceptance_scope": "The original22pins are historical baseline evidence; new parser repair needs its own review and CI."
+  "prior_acceptance_scope": "The original22pins are historical baseline evidence; new parser repair needs its own review and CI.",
+  "hosted_review_followup": [
+    "Map folded Unicode word spans to original source characters",
+    "Translate source and vault-root symlink-loop resolution errors"
+  ],
+  "additional_test": "test_review_boundaries.py"
 }

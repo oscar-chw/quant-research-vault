@@ -1,0 +1,27 @@
+{
+  "source_sha256": "6186de89a6ef31793cc8c40b5af857dc2ea37f172fe407e493351d21842a8638",
+  "same_run": [
+    {
+      "case": "control",
+      "target": "test_review_boundaries.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "hosted-control.log"
+    },
+    {
+      "case": "folded_offsets_as_original",
+      "target": "test_review_boundaries.py::test_folded_word_matches_have_exact_original_source_spans",
+      "exit_code": 1,
+      "result": "KILLED by named behavior failure",
+      "log": "hosted-folded_offsets_as_original.log"
+    },
+    {
+      "case": "uncaught_loop",
+      "target": "test_review_boundaries.py::test_symlink_loops_are_bounded_errors_in_loader_report_cli_and_mcp",
+      "exit_code": 1,
+      "result": "KILLED by named behavior failure",
+      "log": "hosted-uncaught_loop.log"
+    }
+  ],
+  "scope": "Only Unicode span mapping and bounded source/root loop errors; no original assertion changed"
+}

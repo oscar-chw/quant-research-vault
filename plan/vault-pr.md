@@ -67,3 +67,16 @@ head. Record failures exactly and repair causes, with no check changes. Stop at
 the reviewable PR; Oscar's review precedes any merge.
 
 APPROVED 2026-10-15 Oscar via root coordination: "Use a PR and CI; no direct main push". This approves review-branch publication and PR creation, not merge, deployment, visibility changes or private evidence publication.
+
+## Hosted review follow-up
+
+Root accepted the scoped manifest parser repair at6f57773, preserving its original
+124-test and exact-head CI receipts. Hosted review5522830959 at that same head
+found two P2 defects: folded Unicode token boundaries could disagree with evidence
+spans, and symlink-loop resolution could escape bounded errors. Both findings
+require causal regressions and implementation repair; original tests and notes
+remain immutable. The local source-review milestone above does not mean hosted
+review completed without findings. Keep the PR draft and retain both findings.
+
+- [>] 8. Repair hosted Unicode-span and symlink-loop findings with causal boundary controls | needs: 7 | ctx: shared_notes.py,docs/release-review.md | owner: codex-vault-pr | lease: 2026-10-14T18:42:53Z | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+- [ ] 9. Finish hosted review and refreshed exact-head PR checks, retaining earlier findings | needs: 8 | ctx: docs/release-review.md | gate: test -s logs/vault-hosted-final.json && test "$(gh pr view codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault --json headRefOid --jq .headRefOid)" = "$(git rev-parse HEAD)" && gh pr checks codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault

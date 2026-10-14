@@ -53,7 +53,10 @@ def _load_shared_snapshot(
         or not re.fullmatch(r"[0-9a-f]{64}", expected_manifest_sha256)
     ):
         raise SharedNotesError("manifest pin must be a lowercase SHA256 digest")
-    vault_root = Path(root).resolve()
+    try:
+        vault_root = Path(root).resolve()
+    except (OSError, RuntimeError):
+        raise SharedNotesError("vault root could not be resolved") from None
     manifest_path = vault_root / MANIFEST_NAME
     try:
         with manifest_path.open("rb") as manifest_file:
@@ -132,10 +135,10 @@ def _load_shared_snapshot(
                 f"document {document_id} lacks declared public original rights"
             )
 
-        source = (vault_root / source_path).resolve()
-        if not source.is_relative_to(vault_root):
-            raise SharedNotesError(f"source path escapes vault root: {document_id}")
         try:
+            source = (vault_root / source_path).resolve()
+            if not source.is_relative_to(vault_root):
+                raise SharedNotesError(f"source path escapes vault root: {document_id}")
             if not source.exists():
                 raise SharedNotesError(
                     f"source file unavailable: {document_id}"
@@ -144,7 +147,7 @@ def _load_shared_snapshot(
                 raise SharedNotesError(f"source is not a regular file: {document_id}")
             with source.open("rb") as source_file:
                 source_bytes = source_file.read(MAX_SOURCE_BYTES + 1)
-        except OSError:
+        except (OSError, RuntimeError):
             raise SharedNotesError(f"source file unavailable: {document_id}") from None
         if len(source_bytes) > MAX_SOURCE_BYTES:
             raise SharedNotesError(f"source exceeds 256 KiB limit: {document_id}")
@@ -211,6 +214,21 @@ def search_shared_notes(
     return [note for _, note in ranked[: max(0, limit)]]
 
 
+def _folded_word_spans(text: str) -> list[tuple[str, int, int]]:
+    """Tokenize folded text, mapping length-changing folds to original offsets."""
+    original_positions = []
+    for index, char in enumerate(text):
+        original_positions.extend([index] * len(char.casefold()))
+    return [
+        (
+            match.group(),
+            original_positions[match.start()],
+            original_positions[match.end() - 1] + 1,
+        )
+        for match in re.finditer(r"\w+", text.casefold())
+    ]
+
+
 def _evidence_windows(
     note: dict[str, Any], terms: set[str]
 ) -> tuple[list[dict[str, Any]], bool]:
@@ -218,9 +236,7 @@ def _evidence_windows(
     truncated = False
     for number, line in enumerate(note["document"].splitlines(), start=1):
         matches = [
-            match
-            for match in re.finditer(r"\w+", line)
-            if match.group().casefold() in terms
+            start for term, start, _end in _folded_word_spans(line) if term in terms
         ]
         if not matches:
             continue
@@ -228,7 +244,7 @@ def _evidence_windows(
             truncated = True
             break
         # Offsets refer to original Unicode text, never a length-changing casefolded copy.
-        start = max(0, matches[0].start() - 96)
+        start = max(0, matches[0] - 96)
         end = min(len(line), start + 512)
         windows.append(
             {
@@ -271,7 +287,7 @@ def search_shared_notes_report(
     if not isinstance(query, str):
         result["error"] = {"code": "INVALID_QUERY", "message": "query must be text"}
         return result
-    terms = set(re.findall(r"\w+", query.casefold())) - QUERY_STOPWORDS
+    terms = {term for term, _start, _end in _folded_word_spans(query)} - QUERY_STOPWORDS
     result["query_terms"] = sorted(terms)
     if not terms:
         result["error"] = {
@@ -298,9 +314,12 @@ def search_shared_notes_report(
     result["manifest_sha256"] = manifest_hash
     ranked = []
     for note in notes:
-        present = set(
-            re.findall(r"\w+", f"{note['title']} {note['document']}".casefold())
-        )
+        present = {
+            term
+            for term, _start, _end in _folded_word_spans(
+                f"{note['title']} {note['document']}"
+            )
+        }
         matched = terms & present
         if not matched:
             continue

@@ -68,6 +68,13 @@ These historical checks apply to their recorded code hashes. The PR's CI checks
 the full published candidate using the unchanged [quality workflow](../.github/workflows/quality.yml).
 CI success applies to the checked revision; it is not merge approval.
 
+Hosted review also found a Unicode token/excerpt mismatch and symlink-loop errors:
+[recorded findings and initial regression/control](evidence/public-note-interfaces-2026-10-15/hosted-review-findings.json).
+The report now maps case-folded word spans back to original Unicode character
+offsets before quoting. Path resolution failures become explicit invalid-evidence
+results, including source and root loops. These follow-up changes require their
+own final hosted review and CI; the earlier parser acceptance remains scoped.
+
 The CLI's file reader stops at 1 MiB plus one byte before rejecting oversized
 reports. This is a disk-read bound, not a total memory cap. The v1 search report
 does not record the caller's requested result limit: replay derives and reports
