@@ -330,6 +330,16 @@ def search_shared_notes_report(
             "message": "limit must be an integer between 1 and 20",
         }
         return result
+    if expected_manifest_sha256 is not None and (
+        not isinstance(expected_manifest_sha256, str)
+        or not re.fullmatch(r"[0-9a-f]{64}", expected_manifest_sha256)
+    ):
+        result["expected_manifest_sha256"] = None
+        result["error"] = {
+            "code": "INVALID_EVIDENCE",
+            "message": "manifest pin must be a lowercase SHA256 digest",
+        }
+        return result
     try:
         manifest_hash, notes = _load_shared_snapshot(
             root, expected_manifest_sha256=expected_manifest_sha256

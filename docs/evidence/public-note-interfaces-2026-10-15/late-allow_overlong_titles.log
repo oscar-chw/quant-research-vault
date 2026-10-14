@@ -4,7 +4,7 @@ __ test_title_budget_keeps_every_title_match_inside_evidence[overlong-title] ___
 test_remaining_review_paths.py:99: in test_title_budget_keeps_every_title_match_inside_evidence
     assert report["status"] == "error" and report["results"] == []
 E   AssertionError: assert ('matched' == 'error'
-E     
+E
 E     - error
 E     + matched)
 =========================== short test summary info ============================

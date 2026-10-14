@@ -1,0 +1,19 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__ test_invalid_pin_error_omits_input_and_is_small_utf8_json[invalid-unicode] __
+test_pin_error_output.py:21: in test_invalid_pin_error_omits_input_and_is_small_utf8_json
+    assert result["expected_manifest_sha256"] is None
+E   AssertionError: assert '\udcff' is None
+___ test_invalid_pin_error_omits_input_and_is_small_utf8_json[non-json-type] ___
+test_pin_error_output.py:21: in test_invalid_pin_error_omits_input_and_is_small_utf8_json
+    assert result["expected_manifest_sha256"] is None
+E   AssertionError: assert b'bad-pin' is None
+_ test_invalid_pin_error_omits_input_and_is_small_utf8_json[oversized-invalid-pin] _
+test_pin_error_output.py:21: in test_invalid_pin_error_omits_input_and_is_small_utf8_json
+    assert result["expected_manifest_sha256"] is None
+E   AssertionError: assert 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz...zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz' is None
+=========================== short test summary info ============================
+FAILED test_pin_error_output.py::test_invalid_pin_error_omits_input_and_is_small_utf8_json[invalid-unicode]
+FAILED test_pin_error_output.py::test_invalid_pin_error_omits_input_and_is_small_utf8_json[non-json-type]
+FAILED test_pin_error_output.py::test_invalid_pin_error_omits_input_and_is_small_utf8_json[oversized-invalid-pin]
+3 failed in 0.02s

@@ -98,3 +98,8 @@ path strings now return explicit errors. Method-note titles are limited to 512
 Unicode characters; complete title evidence keeps the existing v1 shape. Current
 three-note manifests/pins remain unchanged. [Source mutants](evidence/public-note-interfaces-2026-10-15/late-path-title-controls.json)
 verify both failure classes; their old negative results remain available.
+
+Invalid pin inputs are omitted from error output so unencodable or opaque values
+do not break UTF-8 JSON. [Negative cases](evidence/public-note-interfaces-2026-10-15/pin-error-red.json)
+and a [same-run mutant/control](evidence/public-note-interfaces-2026-10-15/pin-error-controls.json)
+retain the proof; valid and stale expected hashes preserve their prior behavior.
