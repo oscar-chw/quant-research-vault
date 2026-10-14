@@ -1,0 +1,29 @@
+FFFFF.                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[empty-query] _
+test_combined_invalid_inputs.py:35: in test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence
+    assert result["expected_manifest_sha256"] is None
+E   AssertionError: assert '\udcff' is None
+_ test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[invalid-limit] _
+test_combined_invalid_inputs.py:35: in test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence
+    assert result["expected_manifest_sha256"] is None
+E   AssertionError: assert '\udcff' is None
+_ test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[unicode-query] _
+test_combined_invalid_inputs.py:35: in test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence
+    assert result["expected_manifest_sha256"] is None
+E   AssertionError: assert '\udcff' is None
+_ test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[non-text-query] _
+test_combined_invalid_inputs.py:35: in test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence
+    assert result["expected_manifest_sha256"] is None
+E   AssertionError: assert b'bad-pin' is None
+_ test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[both-oversized] _
+test_combined_invalid_inputs.py:35: in test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence
+    assert result["expected_manifest_sha256"] is None
+E   AssertionError: assert 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz...zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz' is None
+=========================== short test summary info ============================
+FAILED test_combined_invalid_inputs.py::test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[empty-query]
+FAILED test_combined_invalid_inputs.py::test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[invalid-limit]
+FAILED test_combined_invalid_inputs.py::test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[unicode-query]
+FAILED test_combined_invalid_inputs.py::test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[non-text-query]
+FAILED test_combined_invalid_inputs.py::test_combined_invalid_inputs_are_small_utf8_errors_with_prior_precedence[both-oversized]
+5 failed, 1 passed in 0.09s

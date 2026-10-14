@@ -282,13 +282,17 @@ def search_shared_notes_report(
     expected_manifest_sha256: str | None = None,
 ) -> dict[str, Any]:
     """Report literal query coverage and exact evidence, without changing legacy search."""
+    pin_is_valid = expected_manifest_sha256 is None or (
+        isinstance(expected_manifest_sha256, str)
+        and re.fullmatch(r"[0-9a-f]{64}", expected_manifest_sha256) is not None
+    )
     result: dict[str, Any] = {
         "schema": REPORT_SCHEMA,
         "query": query if isinstance(query, str) else None,
         "query_terms": [],
         "status": "error",
         "manifest_sha256": None,
-        "expected_manifest_sha256": expected_manifest_sha256,
+        "expected_manifest_sha256": expected_manifest_sha256 if pin_is_valid else None,
         "results": [],
         "total_matches": 0,
         "truncated": False,
@@ -330,11 +334,7 @@ def search_shared_notes_report(
             "message": "limit must be an integer between 1 and 20",
         }
         return result
-    if expected_manifest_sha256 is not None and (
-        not isinstance(expected_manifest_sha256, str)
-        or not re.fullmatch(r"[0-9a-f]{64}", expected_manifest_sha256)
-    ):
-        result["expected_manifest_sha256"] = None
+    if not pin_is_valid:
         result["error"] = {
             "code": "INVALID_EVIDENCE",
             "message": "manifest pin must be a lowercase SHA256 digest",

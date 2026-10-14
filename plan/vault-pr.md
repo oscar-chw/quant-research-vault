@@ -91,6 +91,12 @@ the137-test gate and fix the two new contract gaps without changing citation sha
 
 Direct error-serialization probing found invalid manifest pins echo unencodable
 strings/opaque values. Preserve the141-test gate and make this error path safe.
+
+Root probing at577483e found three combined-invalid cases that return before pin
+sanitization. Preserve the144-test gate and existing query/limit error precedence;
+sanitize the echoed field at initialization so every early response is safe.
+- [x] 13. Make combined-invalid-input responses safe without changing error precedence | needs: 12 | ctx: shared_notes.py | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+      2026-10-14T20:16:24Z exit 0 in 6s [b2cfa88a] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))
 - [x] 12. Reject and omit invalid pins before error serialization | needs: 11 | ctx: shared_notes.py | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
       2026-10-14T20:01:30Z exit 0 in 8s [f08458a4] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))
 

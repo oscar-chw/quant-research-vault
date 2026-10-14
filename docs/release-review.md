@@ -103,3 +103,8 @@ Invalid pin inputs are omitted from error output so unencodable or opaque values
 do not break UTF-8 JSON. [Negative cases](evidence/public-note-interfaces-2026-10-15/pin-error-red.json)
 and a [same-run mutant/control](evidence/public-note-interfaces-2026-10-15/pin-error-controls.json)
 retain the proof; valid and stale expected hashes preserve their prior behavior.
+
+[Combined-invalid-input regressions](evidence/public-note-interfaces-2026-10-15/combined-invalid-red.json)
+and [same-run mutation controls](evidence/public-note-interfaces-2026-10-15/combined-invalid-controls.json)
+ensure every early error is initialized safely while query/limit error precedence
+and valid expected hashes remain unchanged. Root negative observations are retained.
