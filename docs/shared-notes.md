@@ -41,3 +41,7 @@ Reproducible research runs must supply and retain the expected manifest digest.
 Explicit empty CLI values still select their requested mode: `--shared-query ''`
 prints an empty result, and `--shared-note ''` reports a missing document ID.
 They never fall through to server startup.
+
+Method-note titles contain at most 512 Unicode characters, so a complete title
+fits the existing labelled citation window. Longer titles are invalid evidence;
+put detailed descriptions in the source document instead.

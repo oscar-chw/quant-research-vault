@@ -1,0 +1,46 @@
+FF.F                                                                     [100%]
+=================================== FAILURES ===================================
+_______________ test_escaped_nul_source_path_is_a_bounded_error ________________
+test_remaining_review_paths.py:31: in test_escaped_nul_source_path_is_a_bounded_error
+    shared_notes.load_shared_notes(notes)
+shared_notes.py:185: in load_shared_notes
+    return _load_shared_snapshot(
+shared_notes.py:140: in _load_shared_snapshot
+    source = (vault_root / source_path).resolve()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<python-runtime>/lib/python3.11/pathlib.py:993: in resolve
+    s = os.path.realpath(self, strict=strict)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen posixpath>:413: in realpath
+    ???
+<frozen posixpath>:457: in _joinrealpath
+    ???
+E   ValueError: embedded null byte
+________________ test_nul_root_argument_is_a_safe_library_error ________________
+test_remaining_review_paths.py:76: in test_nul_root_argument_is_a_safe_library_error
+    shared_notes.load_shared_notes(root)
+shared_notes.py:185: in load_shared_notes
+    return _load_shared_snapshot(
+shared_notes.py:58: in _load_shared_snapshot
+    vault_root = Path(root).resolve()
+                 ^^^^^^^^^^^^^^^^^^^^
+<python-runtime>/lib/python3.11/pathlib.py:993: in resolve
+    s = os.path.realpath(self, strict=strict)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen posixpath>:413: in realpath
+    ???
+<frozen posixpath>:457: in _joinrealpath
+    ???
+E   ValueError: embedded null byte
+__ test_title_budget_keeps_every_title_match_inside_evidence[overlong-title] ___
+test_remaining_review_paths.py:99: in test_title_budget_keeps_every_title_match_inside_evidence
+    assert report["status"] == "error" and report["results"] == []
+E   AssertionError: assert ('matched' == 'error'
+E
+E     - error
+E     + matched)
+=========================== short test summary info ============================
+FAILED test_remaining_review_paths.py::test_escaped_nul_source_path_is_a_bounded_error
+FAILED test_remaining_review_paths.py::test_nul_root_argument_is_a_safe_library_error
+FAILED test_remaining_review_paths.py::test_title_budget_keeps_every_title_match_inside_evidence[overlong-title]
+3 failed, 1 passed in 0.87s

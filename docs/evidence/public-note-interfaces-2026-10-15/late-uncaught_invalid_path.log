@@ -1,0 +1,21 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________ test_escaped_nul_source_path_is_a_bounded_error ________________
+test_remaining_review_paths.py:31: in test_escaped_nul_source_path_is_a_bounded_error
+    shared_notes.load_shared_notes(notes)
+shared_notes.py:190: in load_shared_notes
+    return _load_shared_snapshot(
+shared_notes.py:143: in _load_shared_snapshot
+    source = (vault_root / source_path).resolve()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/opt/homebrew/Cellar/python@3.11/3.11.15_4/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py:993: in resolve
+    s = os.path.realpath(self, strict=strict)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen posixpath>:413: in realpath
+    ???
+<frozen posixpath>:457: in _joinrealpath
+    ???
+E   ValueError: embedded null byte
+=========================== short test summary info ============================
+FAILED test_remaining_review_paths.py::test_escaped_nul_source_path_is_a_bounded_error
+1 failed in 0.65s

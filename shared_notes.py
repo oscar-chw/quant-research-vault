@@ -14,6 +14,7 @@ DEFAULT_SHARED_NOTES_ROOT = Path(__file__).parent / "notes"
 MANIFEST_NAME = "manifest.json"
 SCHEMA = "quant-shared-notes/v1"
 MAX_SOURCE_BYTES = 256 * 1024
+MAX_TITLE_CHARS = 512
 REPORT_SCHEMA = "quant-shared-search-report/v1"
 VERIFICATION_SCHEMA = "quant-shared-search-verification/v1"
 MAX_REPORT_BYTES = 1024 * 1024
@@ -56,7 +57,7 @@ def _load_shared_snapshot(
         raise SharedNotesError("manifest pin must be a lowercase SHA256 digest")
     try:
         vault_root = Path(root).resolve()
-    except (OSError, RuntimeError):
+    except (OSError, RuntimeError, ValueError):
         raise SharedNotesError("vault root could not be resolved") from None
     manifest_path = vault_root / MANIFEST_NAME
     try:
@@ -124,6 +125,8 @@ def _load_shared_snapshot(
             or not isinstance(rights, dict)
         ):
             raise SharedNotesError(f"invalid metadata for {document_id}")
+        if len(title) > MAX_TITLE_CHARS:
+            raise SharedNotesError(f"title exceeds 512 character limit: {document_id}")
         basis = rights.get("basis")
         if (
             not isinstance(rights.get("license"), str)
@@ -148,7 +151,9 @@ def _load_shared_snapshot(
                 raise SharedNotesError(f"source is not a regular file: {document_id}")
             with source.open("rb") as source_file:
                 source_bytes = source_file.read(MAX_SOURCE_BYTES + 1)
-        except (OSError, RuntimeError):
+        except SharedNotesError:
+            raise
+        except (OSError, RuntimeError, ValueError):
             raise SharedNotesError(f"source file unavailable: {document_id}") from None
         if len(source_bytes) > MAX_SOURCE_BYTES:
             raise SharedNotesError(f"source exceeds 256 KiB limit: {document_id}")

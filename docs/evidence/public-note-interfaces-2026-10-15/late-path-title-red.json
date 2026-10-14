@@ -1,0 +1,13 @@
+{
+  "reviewed_head": "f946531e94a1ad621f1d6245fe6d6e733262c4b7",
+  "command": "python -m pytest -q test_remaining_review_paths.py --tb=short",
+  "exit_code": 1,
+  "result": "3 failed, 1 passed in 0.87s",
+  "source_sha256": "b50508d094c988134a030bd1544420f32a257e07d20f1f13eb8025b5a3393d40",
+  "control": "512-character title still returns complete matching title evidence",
+  "findings": [
+    "discussion_r4275425465",
+    "discussion_r4275425471"
+  ],
+  "scope": "Path NUL translation and original citation-shape-preserving title cap"
+}

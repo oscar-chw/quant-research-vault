@@ -90,3 +90,11 @@ reports. This is a disk-read bound, not a total memory cap. The v1 search report
 does not record the caller's requested result limit: replay derives and reports
 its visible-result cap. Verification cannot authenticate an author or report time.
 No general retrieval quality, token savings, predictive result or alpha is claimed.
+
+The next review isolated invalid path strings and title matches outside the
+512-character prefix. The [negative receipt](evidence/public-note-interfaces-2026-10-15/late-path-title-red.json)
+records three failures and a maximum-length title control. Invalid source/root
+path strings now return explicit errors. Method-note titles are limited to 512
+Unicode characters; complete title evidence keeps the existing v1 shape. Current
+three-note manifests/pins remain unchanged. [Source mutants](evidence/public-note-interfaces-2026-10-15/late-path-title-controls.json)
+verify both failure classes; their old negative results remain available.
