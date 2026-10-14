@@ -1,0 +1,19 @@
+{
+  "schema": "vault-pr-ci-evidence/v1",
+  "pull_request": "https://github.com/oscar-chw/quant-research-vault/pull/1",
+  "first_review_head": "334bf77f7b9060da167e9336e061cdbecbc70314",
+  "run_url": "https://github.com/oscar-chw/quant-research-vault/actions/runs/38614448277",
+  "conclusion": "success",
+  "workflow": "quality",
+  "checks": [
+    "Python3.12 dependency installation",
+    "ruff check .",
+    "ruff format --check .",
+    "mypy",
+    "pytest -q"
+  ],
+  "pytest": "124 passed",
+  "source_sha256": "6bf4036181cc56cfa4c0bec36926abb2955e268367537b2c8018260fdb773781",
+  "source_review": "review/vault-pr.md;ADVANCE",
+  "publication_scope": "DraftPR; no main push or merge; final metadata head requires its own remote checks."
+}

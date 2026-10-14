@@ -22,7 +22,8 @@ Done-condition: `plan gate vault-pr 7` requires the PR head to equal the local H
       2026-10-14T18:18:31Z exit 0 in 5s [665d2d44] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))
 - [x] 6. Record independent Codex review of the public implementation diff | needs: 5 | ctx: docs/release-review.md | owner: codex-vault-pr | gate: test -s review/vault-pr.md && grep -q '^VERDICT: ADVANCE' review/vault-pr.md
       2026-10-14T18:19:44Z exit 0 in 0s [da39a3ee] — (no output)
-- [>] 7. Open the review PR and verify successful remote CI at the exact final head | needs: 6 | ctx: docs/release-review.md | owner: codex-vault-pr | lease: 2026-10-14T18:20:54Z | gate: test "$(gh pr view codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault --json headRefOid --jq .headRefOid)" = "$(git rev-parse HEAD)" && gh pr checks codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault
+- [x] 7. Open the review PR and verify successful remote CI at the exact final head | needs: 6 | ctx: docs/release-review.md | owner: codex-vault-pr | gate: test "$(gh pr view codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault --json headRefOid --jq .headRefOid)" = "$(git rev-parse HEAD)" && gh pr checks codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault
+      2026-10-14T18:23:59Z exit 0 in 2s [6cbe285e] — test pass 39s https://github.com/oscar-chw/quant-research-vault/actions/runs/38614448277/job/116025810396
 
 ## analysis
 
