@@ -1,0 +1,12 @@
+{
+  "reviewed_head": "e92e1721a36ba6295e03b70dcb07ef4c604282d6",
+  "command": "python -m pytest -q test_hosted_contract_edges.py --tb=short",
+  "exit_code": 1,
+  "result": "7 failed, 2 passed in 2.04s",
+  "source_sha256": {
+    "shared_notes.py": "6186de89a6ef31793cc8c40b5af857dc2ea37f172fe407e493351d21842a8638",
+    "search_mcp.py": "eb5528442c5e7cda305cf47e864916ad26fb2ba8a20163f53c38f4e9831cf88d"
+  },
+  "scope": "Mixed title/body citation, UTF8 query budget, aggregate output budget and explicit-empty CLI routing; server entry blocked by trace witness",
+  "initial_result_before_short_labels": "7failed2passed2.10s; auto-generated megabyte IDs made diagnostics impractical; only display IDs changed, all assertions/input values retained"
+}

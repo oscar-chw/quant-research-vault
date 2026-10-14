@@ -606,9 +606,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    if args.shared_note or args.shared_query:
+    if args.shared_note is not None or args.shared_query is not None:
         try:
-            if args.shared_note:
+            if args.shared_note is not None:
                 notes = shared_notes.load_shared_notes(
                     args.shared_root,
                     expected_manifest_sha256=args.manifest_sha256,
@@ -624,11 +624,11 @@ if __name__ == "__main__":
                 )
         except shared_notes.SharedNotesError as exc:
             parser.exit(1, f"shared-note error: {exc}\n")
-        if args.shared_note and not notes:
+        if args.shared_note is not None and not notes:
             parser.exit(
                 1, f"shared-note error: document id not found: {args.shared_note}\n"
             )
-        output = notes[0] if args.shared_note else notes
+        output = notes[0] if args.shared_note is not None else notes
         print(json.dumps(output, ensure_ascii=False, indent=2))
     elif args.test:
         test_search(args.test)

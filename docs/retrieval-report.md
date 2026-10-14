@@ -69,3 +69,14 @@ Stopwords: `a an and are as at be by can do does for from how i in is it of on
 or the to was what when where which with`. An empty effective query is an error;
 it is not a request to return every note. Input limit is1..20. No corpus is fetched,
 index opened or model called by the library or the report CLI.
+
+Queries are limited to 16 KiB of UTF-8 before tokenization. Oversized input returns
+`QUERY_TOO_LARGE`; invalid Unicode returns `INVALID_QUERY`. Both omit the raw query
+and evidence. Successful reports also fit the verifier's existing 1 MiB budget,
+including the report CLI's UTF-8 JSON formatting and trailing newline. Aggregate
+metadata/result copies that exceed it return `REPORT_TOO_LARGE` with no results.
+This is a serialized-output bound, not a total memory bound.
+
+When any matched term occurs only in the manifest title, the report includes a
+labelled `manifest_title` excerpt alongside document windows. It reserves room
+within the existing three-window limit and discloses omitted document windows.

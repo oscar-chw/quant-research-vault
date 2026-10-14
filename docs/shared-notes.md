@@ -37,3 +37,7 @@ the compatible major version. See the [official low-level server documentation](
 Without a caller-supplied manifest pin, checks establish consistency with the
 current local manifest; they do not authenticate an earlier approved corpus.
 Reproducible research runs must supply and retain the expected manifest digest.
+
+Explicit empty CLI values still select their requested mode: `--shared-query ''`
+prints an empty result, and `--shared-note ''` reports a missing document ID.
+They never fall through to server startup.

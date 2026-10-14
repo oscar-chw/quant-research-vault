@@ -17,6 +17,7 @@ MAX_SOURCE_BYTES = 256 * 1024
 REPORT_SCHEMA = "quant-shared-search-report/v1"
 VERIFICATION_SCHEMA = "quant-shared-search-verification/v1"
 MAX_REPORT_BYTES = 1024 * 1024
+MAX_QUERY_BYTES = 16 * 1024
 QUERY_STOPWORDS = frozenset(
     "a an and are as at be by can do does for from how i in is it of on or the to was what when where which with".split()
 )
@@ -234,13 +235,18 @@ def _evidence_windows(
 ) -> tuple[list[dict[str, Any]], bool]:
     windows: list[dict[str, Any]] = []
     truncated = False
+    document_terms = {
+        term for term, _start, _end in _folded_word_spans(note["document"])
+    }
+    title_needed = bool(terms - document_terms)
+    source_window_limit = 2 if title_needed else 3
     for number, line in enumerate(note["document"].splitlines(), start=1):
         matches = [
             start for term, start, _end in _folded_word_spans(line) if term in terms
         ]
         if not matches:
             continue
-        if len(windows) == 3:
+        if len(windows) == source_window_limit:
             truncated = True
             break
         # Offsets refer to original Unicode text, never a length-changing casefolded copy.
@@ -256,10 +262,10 @@ def _evidence_windows(
             }
         )
         truncated |= start > 0 or end < len(line)
-    if not windows:
+    if title_needed or not windows:
         title = note["title"]
-        windows = [{"kind": "manifest_title", "text": title[:512]}]
-        truncated = len(title) > 512
+        windows.append({"kind": "manifest_title", "text": title[:512]})
+        truncated |= len(title) > 512
     return windows, truncated
 
 
@@ -286,6 +292,24 @@ def search_shared_notes_report(
     }
     if not isinstance(query, str):
         result["error"] = {"code": "INVALID_QUERY", "message": "query must be text"}
+        return result
+    try:
+        too_large = (
+            len(query) > MAX_QUERY_BYTES or len(query.encode("utf-8")) > MAX_QUERY_BYTES
+        )
+    except UnicodeEncodeError:
+        result["query"] = None
+        result["error"] = {
+            "code": "INVALID_QUERY",
+            "message": "query must be UTF-8 text",
+        }
+        return result
+    if too_large:
+        result["query"] = None
+        result["error"] = {
+            "code": "QUERY_TOO_LARGE",
+            "message": "query exceeds 16 KiB UTF-8 limit",
+        }
         return result
     terms = {term for term, _start, _end in _folded_word_spans(query)} - QUERY_STOPWORDS
     result["query_terms"] = sorted(terms)
@@ -358,6 +382,23 @@ def search_shared_notes_report(
     if result["truncated"]:
         result["partial_reasons"].append("limit")
     result["status"] = "partial" if result["partial_reasons"] else "matched"
+    # Match the CLI's actual UTF-8 output including its trailing newline, so
+    # the saved file also fits the verifier's existing 1 MiB read bound.
+    if (
+        len(json.dumps(result, ensure_ascii=False, indent=2).encode("utf-8")) + 1
+        > MAX_REPORT_BYTES
+    ):
+        result.update(
+            status="error",
+            results=[],
+            total_matches=0,
+            truncated=False,
+            partial_reasons=[],
+            error={
+                "code": "REPORT_TOO_LARGE",
+                "message": "report exceeds 1 MiB serialized limit",
+            },
+        )
     return result
 
 

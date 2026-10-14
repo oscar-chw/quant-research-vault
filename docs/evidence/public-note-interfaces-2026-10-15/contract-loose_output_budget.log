@@ -1,0 +1,12 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_report_budget_includes_metadata_and_result_copies ____________
+test_hosted_contract_edges.py:95: in test_report_budget_includes_metadata_and_result_copies
+    assert report["status"] == "error" and report["results"] == []
+E   AssertionError: assert ('matched' == 'error'
+E
+E     - error
+E     + matched)
+=========================== short test summary info ============================
+FAILED test_hosted_contract_edges.py::test_report_budget_includes_metadata_and_result_copies
+1 failed in 0.11s

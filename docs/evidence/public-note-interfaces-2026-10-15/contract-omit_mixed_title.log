@@ -1,0 +1,9 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_title_terms_are_cited_even_with_document_windows[point bounded] _____
+test_hosted_contract_edges.py:36: in test_title_terms_are_cited_even_with_document_windows
+    assert {"kind": "manifest_title", "text": entry["title"]} in windows
+E   AssertionError: assert {'kind': 'manifest_title', 'text': 'Point in time method'} in [{'kind': 'source_text', 'line': 1, 'start_char': 0, 'end_char': 24, ...}, {'kind': 'source_text', 'line': 2, 'start_char': 0, 'end_char': 24, ...}]
+=========================== short test summary info ============================
+FAILED test_hosted_contract_edges.py::test_title_terms_are_cited_even_with_document_windows[point bounded]
+1 failed in 0.03s

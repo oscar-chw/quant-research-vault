@@ -75,6 +75,16 @@ offsets before quoting. Path resolution failures become explicit invalid-evidenc
 results, including source and root loops. These follow-up changes require their
 own final hosted review and CI; the earlier parser acceptance remains scoped.
 
+The next hosted review found missing title evidence in mixed title/body matches,
+successful reports larger than the verifier can admit, and empty explicit shared
+CLI options selecting server mode. The
+[causal regression receipt](evidence/public-note-interfaces-2026-10-15/hosted-contract-edges-red.json)
+preserves seven failures and two controls before repair. Nine cases now pass;
+[four source mutants](evidence/public-note-interfaces-2026-10-15/contract-mutation-controls.json)
+isolate missing title evidence, relaxed query/output bounds and the wrong CLI mode.
+The CLI witness blocks server entry before lock acquisition, so no live service
+is started during verification. Earlier findings remain recorded.
+
 The CLI's file reader stops at 1 MiB plus one byte before rejecting oversized
 reports. This is a disk-read bound, not a total memory cap. The v1 search report
 does not record the caller's requested result limit: replay derives and reports

@@ -1,0 +1,12 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_large_or_unencodable_query_is_a_small_safe_error[multibyte-over-budget] _
+test_hosted_contract_edges.py:55: in test_large_or_unencodable_query_is_a_small_safe_error
+    assert report["status"] == "error" and report["results"] == []
+E   AssertionError: assert ('no_match' == 'error'
+E
+E     - error
+E     + no_match)
+=========================== short test summary info ============================
+FAILED test_hosted_contract_edges.py::test_large_or_unencodable_query_is_a_small_safe_error[multibyte-over-budget]
+1 failed in 0.02s
