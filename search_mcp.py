@@ -2,12 +2,15 @@
 """
 search_mcp.py — MCP server for semantic search over the quant research vault.
 
-Exposes five tools:
+Exposes eight tools:
   - search_papers(query, n_results)         semantic search over summaries
   - list_recent_papers(days)                papers added in last N days
   - get_paper(arxiv_id)                     full summary for a specific paper
   - generate_alpha_ideas(topic, n_papers)   AI-generated alpha ideas from vault
   - get_vault_stats()                       total papers, date range, index size
+  - search_shared_notes(query, limit)       legacy pinned method-note envelopes
+  - search_shared_notes_report(query, limit) traceable lexical evidence/status
+  - verify_shared_notes_report(report)      saved response/source consistency
 
 The ChromaDB index is built/updated by sync.py. This server is read-only.
 
@@ -34,6 +37,8 @@ import yaml
 from mcp import types
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
+
+import shared_notes
 
 CONFIG_PATH = Path(__file__).parent / "config.yaml"
 
@@ -122,9 +127,18 @@ def get_db(cfg: dict) -> sqlite3.Connection:
 # ── Tool implementations ──────────────────────────────────────────────────────
 
 
+class SearchBackendError(RuntimeError):
+    """A safe failure when the paper vector-search backend is unavailable."""
+
+
 def search_papers(
     collection: chromadb.Collection, query: str, n_results: int = 5
 ) -> list[dict]:
+    if not isinstance(query, str):
+        raise ValueError("query must be text")
+    if type(n_results) is not int or n_results < 1:
+        raise ValueError("n_results must be a positive integer")
+    n_results = min(n_results, 10)
     try:
         results = collection.query(
             query_texts=[query],
@@ -132,7 +146,9 @@ def search_papers(
             include=["documents", "metadatas", "distances"],
         )
     except Exception:
-        return []
+        raise SearchBackendError(
+            "paper search failed: vector backend unavailable"
+        ) from None
 
     papers = []
     for doc, meta, dist in zip(
@@ -273,105 +289,171 @@ def build_server() -> Server:
     collection = get_collection(cfg)
     conn = get_db(cfg)
 
-    server = Server("quant-research")
+    async def list_tools(_context, _params) -> types.ListToolsResult:
+        return types.ListToolsResult(
+            tools=[
+                types.Tool(
+                    name="verify_shared_notes_report",
+                    description=(
+                        "Verify a saved method-note retrieval response against its pinned sources and "
+                        "current v1 lexical policy. This checks consistency, not author identity or relevance."
+                    ),
+                    inputSchema={
+                        "type": "object",
+                        "properties": {"report": {"type": "object"}},
+                        "required": ["report"],
+                    },
+                ),
+                types.Tool(
+                    name="search_shared_notes_report",
+                    description=(
+                        "Trace literal shared-note matches to exact source excerpts and pinned citations. "
+                        "Reports matched, partial, no_match, stale or error; term coverage is not semantic confidence."
+                    ),
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "query": {"type": "string"},
+                            "limit": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 20,
+                                "default": 5,
+                            },
+                            "manifest_sha256": {"type": "string"},
+                        },
+                        "required": ["query"],
+                    },
+                ),
+                types.Tool(
+                    name="search_shared_notes",
+                    description=(
+                        "Search the vault's separately curated, hash-verified original method notes. "
+                        "These are method notes, not arXiv papers."
+                    ),
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "Terms to find in method notes.",
+                            },
+                            "limit": {"type": "integer", "default": 5},
+                            "manifest_sha256": {
+                                "type": "string",
+                                "description": "Optional exact SHA256 pin for notes/manifest.json.",
+                            },
+                        },
+                        "required": ["query"],
+                    },
+                ),
+                types.Tool(
+                    name="search_papers",
+                    description=(
+                        "Semantic search over quant finance research papers in the vault. "
+                        "Returns the most relevant papers for a given query. "
+                        "Use for: finding papers on a specific alpha factor, technique, or market, "
+                        "before engineering features or designing strategies."
+                    ),
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "Natural language search query, e.g. 'momentum factor in crypto', 'volatility prediction LSTM'",
+                            },
+                            "n_results": {
+                                "type": "integer",
+                                "description": "Number of results to return (default: 5, max: 10)",
+                                "default": 5,
+                            },
+                        },
+                        "required": ["query"],
+                    },
+                ),
+                types.Tool(
+                    name="list_recent_papers",
+                    description="List quant finance papers added to the vault in the last N days.",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "days": {
+                                "type": "integer",
+                                "description": "How many days back to look (default: 7)",
+                                "default": 7,
+                            },
+                        },
+                    },
+                ),
+                types.Tool(
+                    name="get_paper",
+                    description="Get the full structured summary for a specific paper by arXiv ID.",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "arxiv_id": {
+                                "type": "string",
+                                "description": "arXiv paper ID, e.g. '2601.12345' or '2601.12345v2'",
+                            },
+                        },
+                        "required": ["arxiv_id"],
+                    },
+                ),
+                types.Tool(
+                    name="generate_alpha_ideas",
+                    description=(
+                        "Search the vault for research papers relevant to a topic and return their "
+                        "excerpts as context for drafting alpha ideas. This server calls no model; "
+                        "the calling assistant drafts the ideas."
+                    ),
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "topic": {
+                                "type": "string",
+                                "description": "The trading topic to generate ideas for, e.g. 'crypto momentum', 'volatility arbitrage'",
+                            },
+                            "n_papers": {
+                                "type": "integer",
+                                "description": "Number of vault papers to use as context (default: 6, max: 10)",
+                                "default": 6,
+                            },
+                        },
+                        "required": ["topic"],
+                    },
+                ),
+                types.Tool(
+                    name="get_vault_stats",
+                    description=(
+                        "Get statistics about the quant research vault: total papers, "
+                        "processed count, date range covered, and ChromaDB index size."
+                    ),
+                    inputSchema={
+                        "type": "object",
+                        "properties": {},
+                    },
+                ),
+            ]
+        )
 
-    @server.list_tools()
-    async def list_tools() -> list[types.Tool]:
-        return [
-            types.Tool(
-                name="search_papers",
-                description=(
-                    "Semantic search over quant finance research papers in the vault. "
-                    "Returns the most relevant papers for a given query. "
-                    "Use for: finding papers on a specific alpha factor, technique, or market, "
-                    "before engineering features or designing strategies."
-                ),
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "Natural language search query, e.g. 'momentum factor in crypto', 'volatility prediction LSTM'",
-                        },
-                        "n_results": {
-                            "type": "integer",
-                            "description": "Number of results to return (default: 5, max: 10)",
-                            "default": 5,
-                        },
-                    },
-                    "required": ["query"],
-                },
-            ),
-            types.Tool(
-                name="list_recent_papers",
-                description="List quant finance papers added to the vault in the last N days.",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "days": {
-                            "type": "integer",
-                            "description": "How many days back to look (default: 7)",
-                            "default": 7,
-                        },
-                    },
-                },
-            ),
-            types.Tool(
-                name="get_paper",
-                description="Get the full structured summary for a specific paper by arXiv ID.",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "arxiv_id": {
-                            "type": "string",
-                            "description": "arXiv paper ID, e.g. '2601.12345' or '2601.12345v2'",
-                        },
-                    },
-                    "required": ["arxiv_id"],
-                },
-            ),
-            types.Tool(
-                name="generate_alpha_ideas",
-                description=(
-                    "Search the vault for research papers relevant to a topic and return their "
-                    "excerpts as context for drafting alpha ideas. This server calls no model; "
-                    "the calling assistant drafts the ideas."
-                ),
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "topic": {
-                            "type": "string",
-                            "description": "The trading topic to generate ideas for, e.g. 'crypto momentum', 'volatility arbitrage'",
-                        },
-                        "n_papers": {
-                            "type": "integer",
-                            "description": "Number of vault papers to use as context (default: 6, max: 10)",
-                            "default": 6,
-                        },
-                    },
-                    "required": ["topic"],
-                },
-            ),
-            types.Tool(
-                name="get_vault_stats",
-                description=(
-                    "Get statistics about the quant research vault: total papers, "
-                    "processed count, date range covered, and ChromaDB index size."
-                ),
-                inputSchema={
-                    "type": "object",
-                    "properties": {},
-                },
-            ),
-        ]
-
-    @server.call_tool()
-    async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
+    async def call_tool(_context, params: types.CallToolRequestParams):
+        name = params.name
+        arguments = params.arguments or {}
         if name == "search_papers":
             query = arguments["query"]
-            n = min(int(arguments.get("n_results", 5)), 10)
-            results = search_papers(collection, query, n)
+            n = arguments.get("n_results", 5)
+            try:
+                results = search_papers(collection, query, n)
+            except ValueError as exc:
+                return types.CallToolResult(
+                    content=[types.TextContent(type="text", text=f"Error: {exc}.")],
+                    isError=True,
+                )
+            except SearchBackendError:
+                text = "Error: paper search backend unavailable."
+                return types.CallToolResult(
+                    content=[types.TextContent(type="text", text=text)], isError=True
+                )
             if not results:
                 text = f"No papers found matching '{query}'. Run `python run.py` to fetch and index papers first."
             else:
@@ -383,6 +465,51 @@ def build_server() -> Server:
                         f"{r['summary_excerpt']}\n"
                     )
                 text = "\n---\n".join(lines)
+
+        elif name == "verify_shared_notes_report":
+            verification = shared_notes.verify_shared_notes_report(
+                arguments.get("report")
+            )
+            return types.CallToolResult(
+                content=[
+                    types.TextContent(
+                        type="text",
+                        text=json.dumps(verification, ensure_ascii=False, indent=2),
+                    )
+                ],
+                isError=verification["status"] != "verified",
+            )
+
+        elif name == "search_shared_notes_report":
+            report = shared_notes.search_shared_notes_report(
+                arguments.get("query"),
+                limit=arguments.get("limit", 5),
+                expected_manifest_sha256=arguments.get("manifest_sha256"),
+            )
+            return types.CallToolResult(
+                content=[
+                    types.TextContent(
+                        type="text",
+                        text=json.dumps(report, ensure_ascii=False, indent=2),
+                    )
+                ],
+                isError=report["status"] in {"stale", "error"},
+            )
+
+        elif name == "search_shared_notes":
+            try:
+                notes = shared_notes.search_shared_notes(
+                    arguments["query"],
+                    limit=arguments.get("limit", 5),
+                    expected_manifest_sha256=arguments.get("manifest_sha256"),
+                )
+            except shared_notes.SharedNotesError as exc:
+                text = f"Error: shared-note {exc}."
+                return types.CallToolResult(
+                    content=[types.TextContent(type="text", text=text)], isError=True
+                )
+            else:
+                text = json.dumps(notes, ensure_ascii=False, indent=2)
 
         elif name == "list_recent_papers":
             days = int(arguments.get("days", 7))
@@ -417,9 +544,9 @@ def build_server() -> Server:
         else:
             text = f"Unknown tool: {name}"
 
-        return [types.TextContent(type="text", text=text)]
+        return types.CallToolResult(content=[types.TextContent(type="text", text=text)])
 
-    return server
+    return Server("quant-research", on_list_tools=list_tools, on_call_tool=call_tool)
 
 
 async def run_server() -> None:
@@ -439,7 +566,11 @@ async def run_server() -> None:
 def test_search(query: str) -> None:
     cfg = load_config()
     collection = get_collection(cfg)
-    results = search_papers(collection, query)
+    try:
+        results = search_papers(collection, query)
+    except SearchBackendError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        raise SystemExit(1) from None
     if not results:
         print("No results. Have you run `python run.py` yet?")
         return
@@ -454,9 +585,52 @@ def test_search(query: str) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--test", metavar="QUERY", help="Test search without MCP")
+    parser.add_argument(
+        "--shared-note",
+        metavar="ID",
+        help="Print one verified shared method note as JSON",
+    )
+    parser.add_argument(
+        "--shared-query",
+        metavar="QUERY",
+        help="Search the separately curated method notes",
+    )
+    parser.add_argument(
+        "--shared-root",
+        type=Path,
+        default=shared_notes.DEFAULT_SHARED_NOTES_ROOT,
+        help="Notes directory containing manifest.json (default: this checkout's notes/)",
+    )
+    parser.add_argument(
+        "--manifest-sha256", help="Require this exact shared manifest SHA256"
+    )
     args = parser.parse_args()
 
-    if args.test:
+    if args.shared_note or args.shared_query:
+        try:
+            if args.shared_note:
+                notes = shared_notes.load_shared_notes(
+                    args.shared_root,
+                    expected_manifest_sha256=args.manifest_sha256,
+                )
+                notes = [
+                    note for note in notes if note["document_id"] == args.shared_note
+                ]
+            else:
+                notes = shared_notes.search_shared_notes(
+                    args.shared_query,
+                    root=args.shared_root,
+                    expected_manifest_sha256=args.manifest_sha256,
+                )
+        except shared_notes.SharedNotesError as exc:
+            parser.exit(1, f"shared-note error: {exc}\n")
+        if args.shared_note and not notes:
+            parser.exit(
+                1, f"shared-note error: document id not found: {args.shared_note}\n"
+            )
+        output = notes[0] if args.shared_note else notes
+        print(json.dumps(output, ensure_ascii=False, indent=2))
+    elif args.test:
         test_search(args.test)
     else:
         # Refuse to start if another instance is already running.

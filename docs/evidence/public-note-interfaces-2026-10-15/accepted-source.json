@@ -1,0 +1,88 @@
+{
+  "schema": "vault-note-interface-evidence/v1",
+  "accepted_implementation": "8bfa47ee9ecf17c7a5c13514f5f8ccd9b21dfda4",
+  "source_sha256": {
+    "doctor.py": "c7bf214d769d2fedac692f5f5f4977d96ec1ba719a5ed9f3216d74bebfa5ffc5",
+    "fetch.py": "01b5022b126a13a9af964bc6b6bd8bc9ecf6319531d7466381762c8ef585647b",
+    "install.py": "ae05fd7194a10bfe10c325f3f929e89f67ddf7d60a855f639af6e65e09542def",
+    "list_pending.py": "806e5101bab19fd119e63c5549dbd8d26a21dce5ce8dbe74c7dfa8f18a67af9f",
+    "mark_analyzed.py": "b76ebb4926bcac777ecb91dc00f6a6106c5134b68227c3e9377cdf7a32be7f7c",
+    "master.py": "622896d243d84566f507badb246a718213faf0da96a36288676bf897622d84f4",
+    "notes/manifest.json": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+    "notes/methods/ols-validation.md": "bdff9084bdcc8e1f7b821e8bab10d4978d10fde66de4dd1b0922f42b415c08c7",
+    "notes/methods/pca-fit-state.md": "80909971fff591ec83115ab252ed10c300cf86c24d47bf56eb7ae9e83eb748ff",
+    "notes/methods/pit-cutoffs.md": "26aad9cddaf210272d636f0fe8ee0846efbfe8b3ee3b57b87cd11876166a77f7",
+    "process.py": "443f7fe6a6be26c0d550b21e8de93dd60771a8e9cd69552cdf3a14fc5ffc9f5b",
+    "pyproject.toml": "90f3a55062ddcc84621446a51104064bf446da176e3a067764aa6bc48b9b47b4",
+    "requirements.txt": "8f7794570232e7c4380394d6d3a591c0692eee75e9cc3cd3ff70424e823343d6",
+    "research.py": "57da9c088d891427a0b4f55ff5102738e27e0f625ad9678694b0c18e2c8f07ca",
+    "run.py": "202c718aa517f383cc432d7a0c7d257c97c8e2a36a36911136a402879488b18c",
+    "scripts/generate-copilot-context.py": "1129833b5c8491262239f96b49381209e4890d18a76cb5d425c25dec26348236",
+    "search_mcp.py": "eb5528442c5e7cda305cf47e864916ad26fb2ba8a20163f53c38f4e9831cf88d",
+    "shared_notes.py": "ac275d2f7332d8b87e455f44171e033b466a983b45d68ded8adbaf13c371b9f3",
+    "sync.py": "b2244978de5d3c96e33554f55f8ad2454a67a63b1bab3bc1d67ddf1cdbe30fbc",
+    "test_quality.py": "07f6e1cf50af8b78b1438a4ae40e4c9325898fdd46a06f8bf137dd0e7c9530a8",
+    "test_saved_report.py": "565b68c07a3a6c7da5c29e8d15dccd3e0986a2d48b563df41f5c55a41f66aa0f",
+    "test_shared_report.py": "78d5c65eeaa52290f212635341c4cbf6e63f12b0fee1e999f806136829c5995b"
+  },
+  "historical_root_review": {
+    "status": "PASS_SCOPED_LOCAL_ROOT_ACCEPTANCE",
+    "date": "2026-10-14",
+    "tests": "120 passed in 2.57s",
+    "checks": [
+      "ruff check .",
+      "ruff format --check .",
+      "mypy"
+    ],
+    "control": [
+      {
+        "case": "valid_saved_report",
+        "exit_code": 0,
+        "status": "verified"
+      },
+      {
+        "case": "deep_manifest",
+        "bytes": 4001,
+        "exit_code": 1,
+        "result": {
+          "schema": "quant-shared-search-verification/v1",
+          "status": "error",
+          "manifest_sha256": null,
+          "report_sha256": null,
+          "document_ids": [],
+          "replay_limit": null,
+          "error": {
+            "code": "INVALID_EVIDENCE",
+            "message": "invalid manifest: expected UTF-8 JSON"
+          }
+        },
+        "stderr": ""
+      },
+      {
+        "case": "large_integer_manifest",
+        "bytes": 5011,
+        "exit_code": 1,
+        "result": {
+          "schema": "quant-shared-search-verification/v1",
+          "status": "error",
+          "manifest_sha256": null,
+          "report_sha256": null,
+          "document_ids": [],
+          "replay_limit": null,
+          "error": {
+            "code": "INVALID_EVIDENCE",
+            "message": "invalid manifest: expected UTF-8 JSON"
+          }
+        },
+        "stderr": ""
+      }
+    ],
+    "original_receipt_sha256": "1feb0b644a749897040e459becf351fde34590efadb49258ccbfde93184de4e8"
+  },
+  "scope": [
+    "Deterministic pinned lexical-report/source integrity only",
+    "No source truth,semantic research quality,native model or token savings claim",
+    "RemoteCI NOT_RUN and publication/release certification held"
+  ],
+  "publication_packaging": "Machine-specific histories and unmodified failure receipts remain on the preserved local accepted branch; this review branch starts from public main."
+}

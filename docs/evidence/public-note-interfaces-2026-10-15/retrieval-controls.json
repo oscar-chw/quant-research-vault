@@ -1,0 +1,59 @@
+{
+  "control": "Legacy495f0d4 envelope path executed in the same process/run as additive report; exact fixed original corpus.",
+  "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+  "cases": [
+    {
+      "query": "availability",
+      "legacy_ids": [
+        "quant-pit-cutoffs-v1"
+      ],
+      "report_status": "matched",
+      "report_ids": [
+        "quant-pit-cutoffs-v1"
+      ],
+      "fixed_oracle": "PASS"
+    },
+    {
+      "query": "PCA training",
+      "legacy_ids": [
+        "quant-pca-fit-state-v1",
+        "quant-ols-validation-v1"
+      ],
+      "report_status": "matched",
+      "report_ids": [
+        "quant-pca-fit-state-v1",
+        "quant-ols-validation-v1"
+      ],
+      "fixed_oracle": "PASS"
+    },
+    {
+      "query": "PCA banana",
+      "legacy_ids": [
+        "quant-pca-fit-state-v1"
+      ],
+      "report_status": "partial",
+      "report_ids": [
+        "quant-pca-fit-state-v1"
+      ],
+      "fixed_oracle": "PASS"
+    },
+    {
+      "query": "how do I price options",
+      "legacy_ids": [
+        "quant-pca-fit-state-v1"
+      ],
+      "report_status": "no_match",
+      "report_ids": [],
+      "fixed_oracle": "PASS"
+    },
+    {
+      "query": "zirconium",
+      "legacy_ids": [],
+      "report_status": "no_match",
+      "report_ids": [],
+      "fixed_oracle": "PASS"
+    }
+  ],
+  "scope": "Five functional regression witnesses, including an unsupported-topic control; not sampled retrieval-quality or alpha evaluation.",
+  "source_sha256": "e09d136bd5076320c9655ecc0b556e8ad582a24e436f86c79033bfaabfbbe6db"
+}

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+import hashlib
 import json
 import shutil
 import subprocess
@@ -9,12 +11,14 @@ from pathlib import Path
 
 import pytest
 import yaml
+from mcp import Client, types
 
 import fetch
 import install
 import master
 import process
 import search_mcp
+import shared_notes
 
 
 def test_save_paper_deduplicates_arxiv_id(tmp_path):
@@ -101,6 +105,303 @@ def test_search_papers_maps_chroma_response():
             "summary_excerpt": "Abstract",
         }
     ]
+
+
+def test_search_papers_surfaces_backend_failure_without_diagnostics():
+    class Collection:
+        def count(self):
+            return 1
+
+        def query(self, **_kwargs):
+            raise RuntimeError("provider secret diagnostic")
+
+    with pytest.raises(
+        search_mcp.SearchBackendError, match="paper search failed"
+    ) as exc:
+        search_mcp.search_papers(Collection(), "momentum")
+    assert "provider secret diagnostic" not in str(exc.value)
+
+
+def test_search_papers_keeps_true_empty_results():
+    class Collection:
+        def count(self):
+            return 1
+
+        def query(self, **_kwargs):
+            return {"documents": [[]], "metadatas": [[]], "distances": [[]]}
+
+    assert search_mcp.search_papers(Collection(), "no match") == []
+
+
+def _shared_note_fixture(tmp_path, *, text="A public original note.", rights=None):
+    root = tmp_path / "vault"
+    (root / "methods").mkdir(parents=True)
+    source = text.encode("utf-8")
+    (root / "methods" / "note.md").write_bytes(source)
+    manifest = {
+        "schema": "quant-shared-notes/v1",
+        "revision": "test-v1",
+        "documents": [
+            {
+                "id": "method-one-v1",
+                "document_type": "method_note",
+                "title": "Point in time method",
+                "path": "methods/note.md",
+                "sha256": hashlib.sha256(source).hexdigest(),
+                "source_refs": [
+                    {
+                        "uri": "https://example.test/source",
+                        "kind": "public_code",
+                        "revision": "abc123",
+                    }
+                ],
+                "rights": rights
+                or {
+                    "license": "MIT",
+                    "basis": "original_summary",
+                    "redistribution": "public",
+                },
+            }
+        ],
+    }
+    manifest_path = root / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    return root, manifest_path, manifest
+
+
+def test_shared_note_loader_returns_pinned_document_envelope(tmp_path):
+    root, manifest_path, manifest = _shared_note_fixture(tmp_path)
+    manifest_hash = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    result = shared_notes.load_shared_notes(
+        root, expected_manifest_sha256=manifest_hash
+    )[0]
+    assert result == {
+        "document_id": "method-one-v1",
+        "document_type": "method_note",
+        "title": "Point in time method",
+        "document": "A public original note.",
+        "source_sha256": manifest["documents"][0]["sha256"],
+        "manifest_sha256": manifest_hash,
+        "source_refs": manifest["documents"][0]["source_refs"],
+        "rights": manifest["documents"][0]["rights"],
+    }
+
+
+@pytest.mark.parametrize(
+    "mutation, message",
+    [
+        ("malformed", "invalid manifest"),
+        ("missing", "manifest not found"),
+        ("stale", "manifest SHA256 mismatch"),
+        ("tampered", "source SHA256 mismatch"),
+        ("missing_source", "source file unavailable"),
+        ("invalid_utf8", "source is not UTF-8"),
+        ("outside", "source path escapes vault root"),
+        ("nonpublic", "public original rights"),
+    ],
+)
+def test_shared_note_loader_rejects_invalid_evidence(tmp_path, mutation, message):
+    root, manifest_path, manifest = _shared_note_fixture(tmp_path)
+    if mutation == "malformed":
+        manifest_path.write_text("{", encoding="utf-8")
+    elif mutation == "missing":
+        manifest_path.unlink()
+    elif mutation == "stale":
+        with pytest.raises(shared_notes.SharedNotesError, match=message):
+            shared_notes.load_shared_notes(root, expected_manifest_sha256="0" * 64)
+        return
+    elif mutation == "tampered":
+        (root / "methods" / "note.md").write_text("tampered", encoding="utf-8")
+    elif mutation == "missing_source":
+        (root / "methods" / "note.md").unlink()
+    elif mutation == "invalid_utf8":
+        source = b"\xff"
+        (root / "methods" / "note.md").write_bytes(source)
+        manifest["documents"][0]["sha256"] = hashlib.sha256(source).hexdigest()
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    elif mutation == "outside":
+        (tmp_path / "outside.md").write_text("outside", encoding="utf-8")
+        manifest["documents"][0]["path"] = "../outside.md"
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    elif mutation == "nonpublic":
+        manifest["documents"][0]["rights"]["redistribution"] = "private"
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    with pytest.raises(shared_notes.SharedNotesError, match=message):
+        shared_notes.load_shared_notes(root)
+
+
+def test_shared_note_loader_rejects_duplicate_identity(tmp_path):
+    root, manifest_path, manifest = _shared_note_fixture(tmp_path)
+    manifest["documents"].append(dict(manifest["documents"][0]))
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(shared_notes.SharedNotesError, match="duplicate document id"):
+        shared_notes.load_shared_notes(root)
+
+
+@pytest.mark.parametrize(
+    "source_refs",
+    [[], [{"uri": "not a URI", "kind": "public_code", "revision": "abc123"}]],
+)
+def test_shared_note_loader_requires_structured_source_references(
+    tmp_path, source_refs
+):
+    root, manifest_path, manifest = _shared_note_fixture(tmp_path)
+    manifest["documents"][0]["source_refs"] = source_refs
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(shared_notes.SharedNotesError, match="invalid metadata"):
+        shared_notes.load_shared_notes(root)
+
+
+@pytest.mark.parametrize("oversized", ["manifest", "document"])
+def test_shared_note_loader_bounds_manifest_and_document_reads(tmp_path, oversized):
+    root, manifest_path, manifest = _shared_note_fixture(
+        tmp_path, text="x" * (256 * 1024 + 1) if oversized == "document" else "small"
+    )
+    if oversized == "manifest":
+        manifest_path.write_bytes(manifest_path.read_bytes() + b" " * (256 * 1024))
+    with pytest.raises(shared_notes.SharedNotesError, match="exceeds 256 KiB limit"):
+        shared_notes.load_shared_notes(root)
+
+
+def test_shared_note_search_returns_method_notes_without_paper_fields(tmp_path):
+    root, _, _ = _shared_note_fixture(tmp_path)
+    results = shared_notes.search_shared_notes("point time", root=root)
+    assert len(results) == 1
+    assert results[0]["document_id"] == "method-one-v1"
+    assert results[0]["document_type"] == "method_note"
+    assert "arxiv_id" not in results[0]
+
+
+def test_shared_note_cli_uses_manifest_backed_files(tmp_path):
+    result = subprocess.run(
+        [
+            sys.executable,
+            "search_mcp.py",
+            "--shared-note",
+            "quant-pit-cutoffs-v1",
+            "--manifest-sha256",
+            "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+        ],
+        cwd=Path(__file__).parent,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    envelope = json.loads(result.stdout)
+    assert envelope["document_id"] == "quant-pit-cutoffs-v1"
+    assert envelope["document_type"] == "method_note"
+    assert (
+        envelope["source_sha256"]
+        == "26aad9cddaf210272d636f0fe8ee0846efbfe8b3ee3b57b87cd11876166a77f7"
+    )
+    assert (
+        envelope["manifest_sha256"]
+        == "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a"
+    )
+
+
+def test_mcp_registers_and_serves_shared_note_tool(monkeypatch):
+    class BrokenCollection:
+        def count(self):
+            return 1
+
+        def query(self, **_kwargs):
+            raise RuntimeError("provider diagnostic secret")
+
+    monkeypatch.setattr(search_mcp, "load_config", lambda: {})
+    monkeypatch.setattr(search_mcp, "get_collection", lambda _cfg: BrokenCollection())
+    monkeypatch.setattr(search_mcp, "get_db", lambda _cfg: None)
+    server = search_mcp.build_server()
+    list_handler = server.get_request_handler("tools/list")
+    call_handler = server.get_request_handler("tools/call")
+    assert list_handler is not None
+    assert call_handler is not None
+    registered = asyncio.run(list_handler.handler(None, None))
+    assert "search_shared_notes" in {tool.name for tool in registered.tools}
+
+    result = asyncio.run(
+        call_handler.handler(
+            None,
+            types.CallToolRequestParams(
+                name="search_shared_notes",
+                arguments={
+                    "query": "point time",
+                    "manifest_sha256": "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a",
+                },
+            ),
+        )
+    )
+    envelope = json.loads(result.content[0].text)[0]
+    assert envelope["document_id"] == "quant-pit-cutoffs-v1"
+    assert (
+        envelope["source_sha256"]
+        == "26aad9cddaf210272d636f0fe8ee0846efbfe8b3ee3b57b87cd11876166a77f7"
+    )
+    assert (
+        envelope["manifest_sha256"]
+        == "c15abda5657cc63a953c7d8b8d34f044f0b6dcad09c253a0b9842e5beea4c70a"
+    )
+
+    paper_result = asyncio.run(
+        call_handler.handler(
+            None,
+            types.CallToolRequestParams(
+                name="search_papers", arguments={"query": "momentum"}
+            ),
+        )
+    )
+    assert paper_result.is_error
+    assert "backend unavailable" in paper_result.content[0].text
+    assert "provider diagnostic secret" not in paper_result.content[0].text
+
+
+def test_shared_notes_through_real_mcp_client(monkeypatch):
+    class EmptyCollection:
+        def count(self):
+            return 0
+
+        def query(self, **_kwargs):
+            return {"documents": [[]], "metadatas": [[]], "distances": [[]]}
+
+    monkeypatch.setattr(search_mcp, "load_config", lambda: {})
+    monkeypatch.setattr(search_mcp, "get_collection", lambda _cfg: EmptyCollection())
+    monkeypatch.setattr(search_mcp, "get_db", lambda _cfg: None)
+
+    async def exercise():
+        async with Client(search_mcp.build_server()) as client:
+            listed = await client.list_tools()
+            assert {"search_papers", "search_shared_notes"} <= {
+                tool.name for tool in listed.tools
+            }
+            result = await client.call_tool(
+                "search_shared_notes", {"query": "point time"}
+            )
+            assert not result.is_error
+            note = json.loads(result.content[0].text)[0]
+            assert note["document_id"] == "quant-pit-cutoffs-v1"
+            assert note["document_type"] == "method_note"
+            empty = await client.call_tool("search_papers", {"query": "momentum"})
+            assert not empty.is_error
+            assert "No papers found" in empty.content[0].text
+            invalid = await client.call_tool("search_shared_notes", {"query": 42})
+            assert invalid.is_error
+            assert "query" in invalid.content[0].text
+            for limit in (-1, 0, "invalid", True):
+                invalid_limit = await client.call_tool(
+                    "search_papers", {"query": "momentum", "n_results": limit}
+                )
+                assert invalid_limit.is_error
+                assert "n_results" in invalid_limit.content[0].text
+                assert "backend unavailable" not in invalid_limit.content[0].text
+
+    asyncio.run(exercise())
+
+
+def test_supplied_empty_manifest_pin_is_refused():
+    with pytest.raises(shared_notes.SharedNotesError, match="pin"):
+        shared_notes.load_shared_notes(expected_manifest_sha256="")
 
 
 def test_mcp_db_paths_resolve_next_to_config_not_cwd(monkeypatch, tmp_path):

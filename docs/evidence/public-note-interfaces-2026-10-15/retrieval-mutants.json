@@ -1,0 +1,51 @@
+[
+  {
+    "name": "common_word_noise",
+    "target": "search_shared_notes_report",
+    "test": "test_fixed_source_queries_disclose_coverage",
+    "exit_code": 1,
+    "result": "KILLED; named behavioral assertion failed, not collection/import failure"
+  },
+  {
+    "name": "wrong_citation_line",
+    "target": "_evidence_windows",
+    "test": "test_every_quote_reconstructs_from_verified_source",
+    "exit_code": 1,
+    "result": "KILLED; named behavioral assertion failed, not collection/import failure"
+  },
+  {
+    "name": "hide_stale_status",
+    "target": "search_shared_notes_report",
+    "test": "test_bad_evidence_never_becomes_no_match_or_partial",
+    "exit_code": 1,
+    "result": "KILLED; named behavioral assertion failed, not collection/import failure"
+  },
+  {
+    "name": "trust_changed_source",
+    "target": "_load_shared_snapshot",
+    "test": "test_bad_evidence_never_becomes_no_match_or_partial",
+    "exit_code": 1,
+    "result": "KILLED; named behavioral assertion failed, not collection/import failure"
+  },
+  {
+    "name": "trust_private_rights",
+    "target": "_load_shared_snapshot",
+    "test": "test_bad_evidence_never_becomes_no_match_or_partial",
+    "exit_code": 1,
+    "result": "KILLED; named behavioral assertion failed, not collection/import failure"
+  },
+  {
+    "name": "hide_limit",
+    "target": "search_shared_notes_report",
+    "test": "test_limit_discloses_omitted_matches",
+    "exit_code": 1,
+    "result": "KILLED; named behavioral assertion failed, not collection/import failure"
+  },
+  {
+    "name": "legacy_envelope_drift",
+    "target": "search_shared_notes",
+    "test": "test_legacy_queries_remain_exactly_495f0d4",
+    "exit_code": 1,
+    "result": "KILLED; named behavioral assertion failed, not collection/import failure"
+  }
+]
