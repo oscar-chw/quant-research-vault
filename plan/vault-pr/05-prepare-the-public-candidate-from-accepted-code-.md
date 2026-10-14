@@ -24,12 +24,12 @@ ____________ test_original_corpus_and_checks_remain_byte_identical _____________
               ^^^^^^^^^^^
         )
 
-test_saved_report.py:357: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_saved_report.py:357:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 <python-runtime>/lib/python3.11/pathlib.py:1058: in read_text
     with self.open(mode='r', encoding=encoding, errors=errors) as f:
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<workspace>/docs/evidence/retrieval-report-2026-10-14/preserved-controls.json')
 mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
@@ -57,12 +57,12 @@ __________________ test_legacy_queries_remain_exactly_495f0d4 __________________
               ^^^^^^^^^^^
         )
 
-test_shared_report.py:149: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+test_shared_report.py:149:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 <python-runtime>/lib/python3.11/pathlib.py:1058: in read_text
     with self.open(mode='r', encoding=encoding, errors=errors) as f:
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = PosixPath('<workspace>/docs/evidence/retrieval-report-2026-10-14/legacy-495f0d4.json')
 mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
@@ -89,3 +89,16 @@ FAILED test_shared_report.py::test_legacy_queries_remain_exactly_495f0d4 - Fi...
 ## Summary 2026-10-14T18:18:25Z — local author (identity omitted)
 
 First full public-candidate gate failed2tests/122passed because packaging omitted legacy-495f0d4.json and preserved-controls.json required by unchanged compatibility assertions. Restored both exact original fixture bytes from preservedfa346f8. Original test files remain byte-identical; no test/gate/assertion change. Removed only an accidental extra blank line in the new public red-output copy, retaining its raw bytes locally. Failed full gate remains recorded; corrected packaging rerun follows.
+
+## Attempt 2026-10-14T18:18:31Z — local author (identity omitted) — 5s — exit 0
+
+```
+........................................................................ [ 58%]
+....................................................                     [100%]
+124 passed in 3.26s
+All checks passed!
+36 files already formatted
+Success: no issues found in 14 source files
+.: clean
+overlap: PASS (0 file(s))
+```
