@@ -91,7 +91,8 @@ the137-test gate and fix the two new contract gaps without changing citation sha
 
 Direct error-serialization probing found invalid manifest pins echo unencodable
 strings/opaque values. Preserve the141-test gate and make this error path safe.
-- [>] 12. Reject and omit invalid pins before error serialization | needs: 11 | ctx: shared_notes.py | owner: codex-vault-pr | lease: 2026-10-14T19:57:22Z | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+- [x] 12. Reject and omit invalid pins before error serialization | needs: 11 | ctx: shared_notes.py | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+      2026-10-14T20:01:30Z exit 0 in 8s [f08458a4] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))
 
 - [x] 11. Reject invalid path strings and prevent unsupported long-title evidence | needs: 10 | ctx: shared_notes.py,docs/shared-notes.md | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
       2026-10-14T19:52:41Z exit 0 in 6s [a5007d7b] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))
