@@ -58,10 +58,12 @@ authenticate an author or preserve the original file's whitespace bytes.
 
 Edit an evidence window in the saved file and rerun: exit1, status error,
 code REPORT_MISMATCH. Restore the report and rerun: exit0/verified. Changed note
-bytes or a mismatched manifest produce stale; missing reports use REPORT_UNAVAILABLE;
+bytes or a mismatched manifest produce stale; missing or invalid report paths use REPORT_UNAVAILABLE;
 oversized files use REPORT_TOO_LARGE; invalid UTF-8/JSON, repeated keys, nonfinite
 numbers and excessive nesting use INVALID_REPORT. Messages omit input contents.
 Malformed source metadata uses INVALID_EVIDENCE; it is never admitted as verified.
+Source reconstruction also checks complete matched-term coverage independently of
+policy replay. A reproducible selection that omits a claimed term is refused.
 
 The library canonicalizes caller-supplied objects before checking encoded size;
 the1MiB bound on disk reads applies to the file/CLI path, not total process RSS or

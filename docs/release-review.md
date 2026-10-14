@@ -108,3 +108,13 @@ retain the proof; valid and stale expected hashes preserve their prior behavior.
 and [same-run mutation controls](evidence/public-note-interfaces-2026-10-15/combined-invalid-controls.json)
 ensure every early error is initialized safely while query/limit error precedence
 and valid expected hashes remain unchanged. Root negative observations are retained.
+
+Hosted review at577483e also found uncited distant terms and invalid saved-report
+paths. [Ten boundary cases](evidence/public-note-interfaces-2026-10-15/evidence-coverage-red.json)
+preserve eight initial failures and two controls. The report selects windows for
+distinct uncovered terms; complete tokens must fit within the existing citation
+budget. Impossible claims return `EVIDENCE_LIMIT`, with no result. The verifier
+checks coverage from pinned source spans independently of report replay. Saved-file
+path failures return `REPORT_UNAVAILABLE`.
+[Same-run controls](evidence/public-note-interfaces-2026-10-15/coverage-mutation-controls.json)
+kill first-match selection, missing independent coverage and uncaught-path mutants.

@@ -29,6 +29,11 @@ and immutable upstream source_refs. Bounded evidence windows quote exact origina
 note text with one-based line numbers and zero-based character offsets. At most
 three windows per note,512characters per window; omitted matching lines/text are
 declared. Title-only matches explicitly cite manifest metadata, not source text.
+Every claimed matched term is completely visible in those windows. Repeated early
+matches cannot displace a later distinct term. If the citation budget cannot cover
+the claim, the report returns `EVIDENCE_LIMIT` with no results; it does not silently
+claim an uncited match. This is a deterministic bounded policy, not an optimal
+excerpt-selection algorithm.
 Upstream source_refs are provenance for the original summary, not fetched/verified
 new upstream lines. No model calls, paper/index access or writes occur during a query.
 

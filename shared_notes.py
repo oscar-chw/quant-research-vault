@@ -239,38 +239,64 @@ def _evidence_windows(
     note: dict[str, Any], terms: set[str]
 ) -> tuple[list[dict[str, Any]], bool]:
     windows: list[dict[str, Any]] = []
-    truncated = False
     document_terms = {
         term for term, _start, _end in _folded_word_spans(note["document"])
     }
     title_needed = bool(terms - document_terms)
     source_window_limit = 2 if title_needed else 3
-    for number, line in enumerate(note["document"].splitlines(), start=1):
+    covered = (
+        {term for term, _start, _end in _folded_word_spans(note["title"])} & terms
+        if title_needed
+        else set()
+    )
+    matching_lines = []
+    lines = note["document"].splitlines()
+    for number, line in enumerate(lines, start=1):
         matches = [
-            start for term, start, _end in _folded_word_spans(line) if term in terms
+            (term, start, end)
+            for term, start, end in _folded_word_spans(line)
+            if term in terms
         ]
         if not matches:
             continue
-        if len(windows) == source_window_limit:
-            truncated = True
-            break
-        # Offsets refer to original Unicode text, never a length-changing casefolded copy.
-        start = max(0, matches[0] - 96)
-        end = min(len(line), start + 512)
-        windows.append(
-            {
-                "kind": "source_text",
-                "line": number,
-                "start_char": start,
-                "end_char": end,
-                "text": line[start:end],
-            }
+        matching_lines.append((number, line, matches))
+        for term, offset, token_end in matches:
+            if (
+                term in covered
+                or len(windows) == source_window_limit
+                or token_end - offset > 512
+            ):
+                continue
+            # Cover a complete original token; repeated early matches cannot
+            # consume windows needed by a different, distant claimed term.
+            start = max(0, offset - 96, token_end - 512)
+            end = min(len(line), start + 512)
+            windows.append(
+                {
+                    "kind": "source_text",
+                    "line": number,
+                    "start_char": start,
+                    "end_char": end,
+                    "text": line[start:end],
+                }
+            )
+            covered.update(t for t, a, b in matches if start <= a and b <= end)
+    truncated = any(
+        window["start_char"] > 0 or window["end_char"] < len(lines[window["line"] - 1])
+        for window in windows
+    ) or any(
+        not any(
+            window["line"] == number
+            and window["start_char"] <= start
+            and end <= window["end_char"]
+            for window in windows
         )
-        truncated |= start > 0 or end < len(line)
+        for number, _line, matches in matching_lines
+        for _term, start, end in matches
+    )
     if title_needed or not windows:
         title = note["title"]
         windows.append({"kind": "manifest_title", "text": title[:512]})
-        truncated |= len(title) > 512
     return windows, truncated
 
 
@@ -414,6 +440,18 @@ def search_shared_notes_report(
                 "message": "report exceeds 1 MiB serialized limit",
             },
         )
+    elif not _citations_match_sources(result["results"], notes):
+        result.update(
+            status="error",
+            results=[],
+            total_matches=0,
+            truncated=False,
+            partial_reasons=[],
+            error={
+                "code": "EVIDENCE_LIMIT",
+                "message": "claimed terms do not fit three bounded evidence windows",
+            },
+        )
     return result
 
 
@@ -472,6 +510,14 @@ def _citations_match_sources(hits: list[Any], notes: list[dict[str, Any]]) -> bo
         evidence = hit.get("evidence")
         if not isinstance(evidence, list) or not 1 <= len(evidence) <= 3:
             return False
+        claimed = hit.get("matched_terms")
+        if (
+            not isinstance(claimed, list)
+            or not claimed
+            or not all(isinstance(term, str) for term in claimed)
+        ):
+            return False
+        covered: set[str] = set()
         lines = note["document"].splitlines()
         for window in evidence:
             if not isinstance(window, dict):
@@ -482,6 +528,9 @@ def _citations_match_sources(hits: list[Any], notes: list[dict[str, Any]]) -> bo
                     or window["text"] != note["title"][:512]
                 ):
                     return False
+                covered.update(
+                    term for term, _start, _end in _folded_word_spans(note["title"])
+                )
             elif window.get("kind") == "source_text":
                 if set(window) != {"kind", "line", "start_char", "end_char", "text"}:
                     return False
@@ -499,8 +548,15 @@ def _citations_match_sources(hits: list[Any], notes: list[dict[str, Any]]) -> bo
                     return False
                 if window["text"] != line[start:end]:
                     return False
+                covered.update(
+                    term
+                    for term, token_start, token_end in _folded_word_spans(line)
+                    if start <= token_start and token_end <= end
+                )
             else:
                 return False
+        if not set(claimed) <= covered:
+            return False
     return True
 
 
@@ -610,7 +666,7 @@ def verify_shared_notes_report_file(
     try:
         with Path(path).open("rb") as file:
             raw = file.read(MAX_REPORT_BYTES + 1)
-    except OSError:
+    except (OSError, ValueError):
         return _verification_error(
             "REPORT_UNAVAILABLE", "report file could not be read"
         )

@@ -109,3 +109,12 @@ sanitize the echoed field at initialization so every early response is safe.
 - [x] 8. Repair hosted Unicode-span and symlink-loop findings with causal boundary controls | needs: 7 | ctx: shared_notes.py,docs/release-review.md | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
       2026-10-14T18:55:23Z exit 0 in 5s [79886841] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))
 - [>] 9. Finish hosted review and refreshed exact-head PR checks, retaining earlier findings | needs: 8 | ctx: docs/release-review.md | owner: codex-vault-pr | lease: 2026-10-14T18:58:19Z | gate: test -s logs/vault-hosted-final.json && test "$(gh pr view codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault --json headRefOid --jq .headRefOid)" = "$(git rev-parse HEAD)" && gh pr checks codex/vault-pr-20261015 --repo oscar-chw/quant-research-vault
+
+Hosted review5523965192 at577483e also found distant matched terms omitted from
+bounded citations and invalid saved-report paths escaping structured errors. Keep
+the three-window/512-character citation limits and all original checks. Successful
+reports must cite every claimed term; budgets remain refusal boundaries.
+
+- [x] 14. Repair uncited-term reports and invalid saved-report paths | needs: 13 | ctx: shared_notes.py,docs/retrieval-report.md,docs/saved-report-verification.md | owner: codex-vault-pr | gate: ../_venvs/qrv/bin/python -m pytest -q && ../_venvs/qrv/bin/python -m ruff check . && ../_venvs/qrv/bin/python -m ruff format --check . && ../_venvs/qrv/bin/python -m mypy && python3 ../tools/scan_history.py --since origin/main . && python3 ../tools/check_overlap.py . && git diff --check
+      2026-10-14T20:21:45Z exit 1 in 5s [468f4eb2] — ❘ / 1 file would be reformatted, 51 files already formatted
+      2026-10-14T20:22:22Z exit 0 in 6s [e34f5117] — Success: no issues found in 14 source files / .: clean / overlap: PASS (0 file(s))
