@@ -11,3 +11,16 @@ Hosted review5522830959 at6f57773 found twoP2s. New additive witness initially3F
 ## Summary 2026-10-14T18:52:46Z — local author (identity omitted)
 
 Direct human approved exact one-field newMCPfixture targetcorrection; approved patchBBC713...applied without any assertion/injection change. Four new Unicode/source-root-loop controls nowPASS across loader/report/realCLI/MCP; original published tests and note bytes remain exact6f57773. Prior3FAIL1PASS plus wrongfixture2FAIL2PASS retained; no othercheckchange. Source guards and single span-awarefoldedword policy implemented. Focusedlint/format/mypyPASS; required full node8 gate follows after committing source and privacy-safe evidence.
+
+## Attempt 2026-10-14T18:55:23Z — local author (identity omitted) — 5s — exit 0
+
+```
+........................................................................ [ 56%]
+........................................................                 [100%]
+128 passed in 3.28s
+All checks passed!
+41 files already formatted
+Success: no issues found in 14 source files
+.: clean
+overlap: PASS (0 file(s))
+```
